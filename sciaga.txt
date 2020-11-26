@@ -1,0 +1,11 @@
+1. liczba mnoga end pointów
+    /users
+2. GET tylko do pobierania danych
+3. Nie zadnieżdzać zwracanych danych
+    X /users/7/posts
+    ✓ /posts?user_id=7
+4. ? tylko do filtrowania i paginacji
+5. W przypadku błędu zwracać kod i wiadomość
+6. tylko rzeczowniki w endpointach
+
+ORM implements JPA  - z obiektu java do bazy danych Hibernate/Spring data JPA
