@@ -62,8 +62,9 @@ public class UserController {
     public ResponseEntity<UserDTO> addUser(@RequestBody @Valid @JsonView(UserDTO.Write.class) UserDTO user) throws UserWithEmailAlreadyExistException {
         Optional<UserDTO> userByEmail = manager.findByEmail(user.getEmail());
         if (userByEmail.isPresent()) throw new UserWithEmailAlreadyExistException(user.getEmail());
-        user.setPassword(encoder.encode(user.getPassword()));
-        UserDTO savedUser = mapper.toUserDTO(manager.save(mapper.toUser(user)));
+        User mappedUser = mapper.toUser(user);
+        mappedUser.setPassword(encoder.encode(user.getPassword()));
+        UserDTO savedUser = mapper.toUserDTO(manager.save(mappedUser));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(savedUser.getId())

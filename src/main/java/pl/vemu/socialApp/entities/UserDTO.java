@@ -17,6 +17,13 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserDTO {
 
+    public UserDTO(@NonNull @NotNull @NotBlank String name, String surname, @NonNull @NotNull @Email @Size(max = 320) @NotBlank String email, @NonNull @NotNull @NotBlank String password) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+    }
+
     @JsonView(Read.class)
     private Long id;
 
