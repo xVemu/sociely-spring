@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Main.class)
-class UserControllerTest {
+class UserControllerTest { //TODO commit, then tests
 
     @Autowired
     private UserManager manager;
@@ -97,7 +97,7 @@ class UserControllerTest {
 
     @Test
     public void shouldDeleteUserById() throws UserByIdNotFoundException {
-        ResponseEntity<Void> responseEntity = controller.deleteUserById(user1.getId());
+        ResponseEntity<?> responseEntity = controller.deleteUserById(user1.getId());
         assertEquals(Optional.empty(), manager.findById(user1.getId()));
         assertEquals(ResponseEntity.ok().build(), responseEntity);
     }

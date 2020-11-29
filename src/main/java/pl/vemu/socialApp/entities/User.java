@@ -1,19 +1,19 @@
 package pl.vemu.socialApp.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 @Data
 @Entity
 @Table(name = "users")
+@AllArgsConstructor
 @NoArgsConstructor
 public class User {
 
-    public User(@NonNull String name, String surname, @NonNull String email, @NonNull String password) {
+    public User(String name, String surname, String email, String password) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -22,25 +22,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Null
     private Long id;
 
-    @NonNull
-    @NotNull
-    @NotBlank
     private String name;
 
     private String surname;
 
-    @NonNull
-    @NotNull/*(message = "must be not null")*/
-    @Email/*(message = "is not valid mail")*/
-    @Size(max = 320)
-    @NotBlank
     private String email;
 
-    @NonNull
-    @NotNull
-    @NotBlank
     private String password;
 }

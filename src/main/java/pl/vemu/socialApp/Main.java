@@ -1,6 +1,5 @@
 package pl.vemu.socialApp;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -17,11 +16,6 @@ public class Main {
     @Bean
     public BCryptPasswordEncoder getBCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public ModelMapper getModelMapper() {
-        return new ModelMapper();
     }
 
 }
