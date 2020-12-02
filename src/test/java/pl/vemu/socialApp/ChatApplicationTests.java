@@ -18,10 +18,4 @@ class ChatApplicationTests {
         assertNotNull(controller);
     }
 
-
-    @Test
-    public void shouldEqualName() {
-//        assertEquals("Hello Kamil", controller.hello("Kamil"));
-    }
-
 }

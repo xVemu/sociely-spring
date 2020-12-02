@@ -2,53 +2,64 @@ package pl.vemu.socialApp.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Value;
+import pl.vemu.socialApp.mappers.Default;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
 public class UserDTO {
 
     public UserDTO(@NonNull @NotNull @NotBlank String name, String surname, @NonNull @NotNull @Email @Size(max = 320) @NotBlank String email, @NonNull @NotNull @NotBlank String password) {
+        this(null, name, surname, email, password);
+    }
+
+    @Default
+    public UserDTO(Long id, @NotNull @NotBlank String name, String surname, @NotNull @Email @Size(max = 320) @NotBlank String email, @NotNull @NotBlank String password) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
     }
 
-    @JsonView(Read.class)
-    private Long id;
+    public UserDTO() {
+        this.id = null;
+        this.name = null;
+        this.surname = null;
+        this.email = null;
+        this.password = null;
+    }
 
-    @NonNull
+    @JsonView(Read.class)
+    Long id;
+
+    //    @NonNull
     @NotNull
     @NotBlank
     @JsonView(Normal.class)
-    private String name;
+    String name;
 
     @JsonView(Normal.class)
-    private String surname;
+    String surname;
 
-    @NonNull
+    //    @NonNull
     @NotNull
     @Email
     @Size(max = 320)
     @NotBlank
     @JsonView(Normal.class)
-    private String email;
+    String email;
 
-    @NonNull
+    //    @NonNull
     @NotNull
     @NotBlank
     @JsonView(Write.class)
-    private String password;
+    String password;
 
 
     public static class Read extends Normal {

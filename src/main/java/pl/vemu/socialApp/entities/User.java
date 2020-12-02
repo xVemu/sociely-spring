@@ -1,19 +1,27 @@
 package pl.vemu.socialApp.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.vemu.socialApp.mappers.Default;
 
 import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name = "users")
-@AllArgsConstructor
 @NoArgsConstructor
 public class User {
 
     public User(String name, String surname, String email, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+    }
+
+    @Default
+    public User(Long id, String name, String surname, String email, String password) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
