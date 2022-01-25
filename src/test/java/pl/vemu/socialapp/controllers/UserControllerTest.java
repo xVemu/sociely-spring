@@ -1,4 +1,4 @@
-package pl.vemu.socialApp.controllers;
+package pl.vemu.socialapp.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,12 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import pl.vemu.socialApp.entities.User;
-import pl.vemu.socialApp.entities.UserDTO;
-import pl.vemu.socialApp.exceptions.user.UserByIdNotFoundException;
-import pl.vemu.socialApp.exceptions.user.UserWithEmailAlreadyExistException;
-import pl.vemu.socialApp.managers.UserManager;
-import pl.vemu.socialApp.mappers.UserMapper;
+import pl.vemu.socialapp.entities.User;
+import pl.vemu.socialapp.entities.UserDTO;
+import pl.vemu.socialapp.exceptions.user.UserByIdNotFoundException;
+import pl.vemu.socialapp.exceptions.user.UserWithEmailAlreadyExistException;
+import pl.vemu.socialapp.managers.UserManager;
+import pl.vemu.socialapp.mappers.UserMapper;
 
 import java.util.Optional;
 

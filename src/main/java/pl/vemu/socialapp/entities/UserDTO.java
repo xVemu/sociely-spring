@@ -1,10 +1,10 @@
-package pl.vemu.socialApp.entities;
+package pl.vemu.socialapp.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.NonNull;
 import lombok.Value;
-import pl.vemu.socialApp.mappers.Default;
+import pl.vemu.socialapp.mappers.Default;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

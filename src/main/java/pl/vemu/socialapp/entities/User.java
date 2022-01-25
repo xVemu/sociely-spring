@@ -1,8 +1,8 @@
-package pl.vemu.socialApp.entities;
+package pl.vemu.socialapp.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.vemu.socialApp.mappers.Default;
+import pl.vemu.socialapp.mappers.Default;
 
 import javax.persistence.*;
 
@@ -32,11 +32,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private String surname;
 
+    @Column(
+            nullable = false,
+            length = 320
+    )
     private String email;
 
+    @Column(
+            nullable = false,
+            columnDefinition = "char(60)"
+    )
     private String password;
 }

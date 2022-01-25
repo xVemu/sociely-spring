@@ -1,4 +1,4 @@
-package pl.vemu.socialApp.controllers;
+package pl.vemu.socialapp.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pl.vemu.socialApp.entities.User;
-import pl.vemu.socialApp.entities.UserDTO;
-import pl.vemu.socialApp.exceptions.user.UserByIdNotFoundException;
-import pl.vemu.socialApp.exceptions.user.UserWithEmailAlreadyExistException;
-import pl.vemu.socialApp.managers.UserManager;
-import pl.vemu.socialApp.mappers.UserMapper;
+import pl.vemu.socialapp.entities.User;
+import pl.vemu.socialapp.entities.UserDTO;
+import pl.vemu.socialapp.exceptions.user.UserByIdNotFoundException;
+import pl.vemu.socialapp.exceptions.user.UserWithEmailAlreadyExistException;
+import pl.vemu.socialapp.managers.UserManager;
+import pl.vemu.socialapp.mappers.UserMapper;
 
 import javax.validation.Valid;
 import java.net.URI;

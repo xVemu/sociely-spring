@@ -1,10 +1,10 @@
-package pl.vemu.socialApp.mappers;
+package pl.vemu.socialapp.mappers;
 
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import pl.vemu.socialApp.entities.User;
-import pl.vemu.socialApp.entities.UserDTO;
+import pl.vemu.socialapp.entities.User;
+import pl.vemu.socialapp.entities.UserDTO;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {

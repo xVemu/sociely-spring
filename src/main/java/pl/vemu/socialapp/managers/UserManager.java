@@ -1,12 +1,12 @@
-package pl.vemu.socialApp.managers;
+package pl.vemu.socialapp.managers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.vemu.socialApp.entities.User;
-import pl.vemu.socialApp.entities.UserDTO;
-import pl.vemu.socialApp.repositories.UserRepository;
+import pl.vemu.socialapp.entities.User;
+import pl.vemu.socialapp.entities.UserDTO;
+import pl.vemu.socialapp.repositories.UserRepository;
 
 import java.util.Optional;
 
