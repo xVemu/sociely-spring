@@ -1,4 +1,4 @@
-package pl.vemu.socialapp;
+package pl.vemu.sociely;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,12 +1,18 @@
-package pl.vemu.socialapp.entities;
+package pl.vemu.sociely.entities;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.vemu.socialapp.mappers.Default;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
+import pl.vemu.sociely.mappers.Default;
 
 import javax.persistence.*;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -48,4 +54,17 @@ public class User {
             columnDefinition = "char(60)"
     )
     private String password;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

@@ -1,4 +1,4 @@
-package pl.vemu.socialapp.security;
+package pl.vemu.sociely.security;
 
 import org.springframework.stereotype.Component;
 

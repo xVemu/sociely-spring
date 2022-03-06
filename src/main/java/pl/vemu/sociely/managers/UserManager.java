@@ -1,12 +1,13 @@
-package pl.vemu.socialapp.managers;
+package pl.vemu.sociely.managers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.vemu.socialapp.entities.User;
-import pl.vemu.socialapp.entities.UserDTO;
-import pl.vemu.socialapp.repositories.UserRepository;
+import pl.vemu.sociely.entities.User;
+import pl.vemu.sociely.entities.UserDTO;
+import pl.vemu.sociely.mappers.UserMapper;
+import pl.vemu.sociely.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class UserManager {
 
     private final UserRepository userRepository;
+
+    private final UserMapper mapper;
 
     public Page<UserDTO> findAll(Pageable pageable) {
         return userRepository.findAllAsDTO(pageable);
@@ -28,8 +31,8 @@ public class UserManager {
         return userRepository.findByEmailAsDTO(email);
     }
 
-    public User save(User user) {
-        return userRepository.save(user);
+    public UserDTO save(User user) {
+        return mapper.toUserDTO(userRepository.save(user));
     }
 
     public void deleteAll() {

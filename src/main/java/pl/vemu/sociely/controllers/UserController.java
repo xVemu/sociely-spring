@@ -1,4 +1,4 @@
-package pl.vemu.socialapp.controllers;
+package pl.vemu.sociely.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
@@ -8,15 +8,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pl.vemu.socialapp.entities.User;
-import pl.vemu.socialapp.entities.UserDTO;
-import pl.vemu.socialapp.exceptions.user.UserByIdNotFoundException;
-import pl.vemu.socialapp.exceptions.user.UserWithEmailAlreadyExistException;
-import pl.vemu.socialapp.managers.UserManager;
-import pl.vemu.socialapp.mappers.UserMapper;
+import pl.vemu.sociely.entities.User;
+import pl.vemu.sociely.entities.UserDTO;
+import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
+import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
+import pl.vemu.sociely.managers.UserManager;
+import pl.vemu.sociely.mappers.UserMapper;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -31,8 +30,6 @@ public class UserController {
 
     private final UserMapper mapper;
 
-    private final BCryptPasswordEncoder encoder;
-
     /*@PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {
         Optional<User> userFromDb = repository.findByUsername(user.getUsername());
@@ -41,6 +38,8 @@ public class UserController {
         if (encoder.matches(user.getPassword(), userFromDb.get().getPassword())) return ResponseEntity.ok().build();
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong password!");
     }*/
+
+//    TODO handle null request-body
 
     @GetMapping("/users")
     @JsonView(UserDTO.Read.class)
@@ -60,34 +59,41 @@ public class UserController {
     @PostMapping("/users")
     @JsonView(UserDTO.Read.class)
     public ResponseEntity<UserDTO> addUser(@RequestBody @Valid @JsonView(UserDTO.Write.class) UserDTO user) throws UserWithEmailAlreadyExistException {
-        Optional<UserDTO> userByEmail = manager.findByEmail(user.getEmail());
-        if (userByEmail.isPresent()) throw new UserWithEmailAlreadyExistException(user.getEmail());
-        User mappedUser = mapper.toUser(user);
-        mappedUser.setPassword(encoder.encode(user.getPassword()));
-        UserDTO savedUser = mapper.toUserDTO(manager.save(mappedUser));
+        Optional<UserDTO> userByEmail = manager.findByEmail(user.email());
+        if (userByEmail.isPresent()) throw new UserWithEmailAlreadyExistException(user.email());
+        User mappedUser = mapper.toUserWithPasswordEncryption(user);
+        UserDTO savedUser = manager.save(mappedUser);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(savedUser.getId())
+                .buildAndExpand(savedUser.id())
                 .toUri();
         return ResponseEntity.created(uri).body(savedUser);
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<?> putUser(@PathVariable Long id, @RequestBody @Valid @JsonView(UserDTO.Write.class) UserDTO user) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
-        update(id, user);
-        User userEntity = mapper.toUser(user);
-        userEntity.setId(id);
-        userEntity.setPassword(encoder.encode(user.getPassword()));
+        UserDTO userFromDb = getFromDbIfExist(id, user);
+        User userEntity = mapper.toUserWithPasswordEncryption(user);
+        userEntity.setId(userFromDb.id());
         manager.save(userEntity);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/users/{id}") //TODO valid
     public ResponseEntity<?> patchUser(@PathVariable Long id, @RequestBody @JsonView(UserDTO.Write.class) UserDTO user) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
-        UserDTO userFromDB = update(id, user);
-        User mappedUser = mapper.toUserAndCopyNonNullFields(user, userFromDB);
+        UserDTO userFromDB = getFromDbIfExist(id, user);
+        User mappedUser = mapper.toUserAndCopyNonNullFields(userFromDB, user);
         manager.save(mappedUser);
         return ResponseEntity.noContent().build();
+    }
+
+    private UserDTO getFromDbIfExist(Long id, UserDTO user) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
+        UserDTO userById = manager.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
+        Optional<UserDTO> userByEmail = manager.findByEmail(user.email());
+        if (userByEmail.isPresent() && !userByEmail.get().email().equals(userById.email())) {
+            throw new UserWithEmailAlreadyExistException(user.email());
+        }
+        return userById;
     }
 
     @DeleteMapping("/users")
@@ -101,14 +107,5 @@ public class UserController {
         manager.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
         manager.deleteById(id);
         return ResponseEntity.ok().build();
-    }
-
-    private UserDTO update(Long id, UserDTO user) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
-        UserDTO userById = manager.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
-        Optional<UserDTO> userByEmail = manager.findByEmail(user.getEmail());
-        if (userByEmail.isPresent() && !userByEmail.get().getEmail().equals(userById.getEmail())) {
-            throw new UserWithEmailAlreadyExistException(user.getEmail());
-        }
-        return userById;
     }
 }

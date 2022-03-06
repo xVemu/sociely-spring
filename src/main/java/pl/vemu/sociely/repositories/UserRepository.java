@@ -1,24 +1,24 @@
-package pl.vemu.socialapp.repositories;
+package pl.vemu.sociely.repositories;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
-import pl.vemu.socialapp.entities.User;
-import pl.vemu.socialapp.entities.UserDTO;
+import pl.vemu.sociely.entities.User;
+import pl.vemu.sociely.entities.UserDTO;
 
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-    @Query("SELECT new pl.vemu.socialapp.entities.UserDTO(u.id, u.name, u.surname, u.email, u.password) FROM User u WHERE u.email = ?1")
+    @Query("SELECT new pl.vemu.sociely.entities.UserDTO(u.id, u.name, u.surname, u.email, u.password) FROM User u WHERE u.email = ?1")
     Optional<UserDTO> findByEmailAsDTO(String email);
 
-    @Query("SELECT new pl.vemu.socialapp.entities.UserDTO(u.id, u.name, u.surname, u.email, u.password) FROM User u WHERE u.id = ?1")
+    @Query("SELECT new pl.vemu.sociely.entities.UserDTO(u.id, u.name, u.surname, u.email, u.password) FROM User u WHERE u.id = ?1")
     Optional<UserDTO> findByIdAsDTO(Long id);
 
-    @Query("SELECT new pl.vemu.socialapp.entities.UserDTO(u.id, u.name, u.surname, u.email, u.password) FROM User u")
+    @Query("SELECT new pl.vemu.sociely.entities.UserDTO(u.id, u.name, u.surname, u.email, u.password) FROM User u")
     Page<UserDTO> findAllAsDTO(Pageable pageable);
 }

@@ -1,4 +1,4 @@
-package pl.vemu.socialapp.exceptions.user;
+package pl.vemu.sociely.exceptions.user;
 
 
 import org.springframework.http.HttpStatus;
