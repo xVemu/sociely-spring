@@ -3,7 +3,6 @@ package pl.vemu.sociely.entities;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.NonNull;
-import pl.vemu.sociely.mappers.Default;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -39,14 +38,6 @@ public record UserDTO(
         this(null, name, surname, email, password);
     }
 
-    @Default
-    public UserDTO(Long id, @NotNull @NotBlank String name, String surname, @NotNull @Email @Size(max = 320) @NotBlank String email, @NotNull @NotBlank String password) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-    }
 
     public static class Read extends Normal {
     }

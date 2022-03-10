@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import pl.vemu.sociely.mappers.Default;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -25,7 +24,7 @@ public class User {
         this.password = password;
     }
 
-    @Default
+//    @Default
     public User(Long id, String name, String surname, String email, String password) {
         this.id = id;
         this.name = name;
