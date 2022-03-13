@@ -16,13 +16,15 @@ import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
 import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
 import pl.vemu.sociely.managers.UserManager;
 import pl.vemu.sociely.mappers.UserMapper;
+import pl.vemu.sociely.mappers.View.Read;
+import pl.vemu.sociely.mappers.View.Write;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -30,35 +32,28 @@ public class UserController {
 
     private final UserMapper mapper;
 
-    /*@PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
-        Optional<User> userFromDb = repository.findByUsername(user.getUsername());
-        if (userFromDb.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User doesn't exist");
-        if (encoder.matches(user.getPassword(), userFromDb.get().getPassword())) return ResponseEntity.ok().build();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong password!");
-    }*/
-
 //    TODO handle null request-body
 
-    @GetMapping("/users")
-    @JsonView(UserDTO.Read.class)
-    public Page<UserDTO> getUsers(@PageableDefault(size = 20)
-                                  @SortDefault.SortDefaults({
-                                          @SortDefault(sort = "id", direction = Sort.Direction.ASC)
-                                  }) Pageable pageable) {
+    @GetMapping
+    @JsonView(Read.class)
+    public Page<UserDTO> getUsers(
+            @PageableDefault(size = 20)
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+            })
+                    Pageable pageable) {
         return manager.findAll(pageable);
     }
 
-    @GetMapping("/users/{id}")
-    @JsonView(UserDTO.Read.class)
+    @GetMapping("{id}")
+    @JsonView(Read.class)
     public UserDTO getUserById(@PathVariable Long id) throws UserByIdNotFoundException {
         return manager.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
     }
 
-    @PostMapping("/users")
-    @JsonView(UserDTO.Read.class)
-    public ResponseEntity<UserDTO> addUser(@RequestBody @Valid @JsonView(UserDTO.Write.class) UserDTO user) throws UserWithEmailAlreadyExistException {
+    @PostMapping
+    @JsonView(Read.class)
+    public ResponseEntity<UserDTO> addUser(@RequestBody @Valid @JsonView(Write.class) UserDTO user) throws UserWithEmailAlreadyExistException {
         Optional<UserDTO> userByEmail = manager.findByEmail(user.email());
         if (userByEmail.isPresent()) throw new UserWithEmailAlreadyExistException(user.email());
         User mappedUser = mapper.toUserWithPasswordEncryption(user);
@@ -70,8 +65,8 @@ public class UserController {
         return ResponseEntity.created(uri).body(savedUser);
     }
 
-    @PutMapping("/users/{id}")
-    public ResponseEntity<?> putUser(@PathVariable Long id, @RequestBody @Valid @JsonView(UserDTO.Write.class) UserDTO user) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
+    @PutMapping("{id}")
+    public ResponseEntity<?> putUser(@PathVariable Long id, @RequestBody @Valid @JsonView(Write.class) UserDTO user) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
         UserDTO userFromDb = getFromDbIfExist(id, user);
         User userEntity = mapper.toUserWithPasswordEncryption(user);
         userEntity.setId(userFromDb.id());
@@ -79,11 +74,11 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/users/{id}") //TODO valid
-    public ResponseEntity<?> patchUser(@PathVariable Long id, @RequestBody @JsonView(UserDTO.Write.class) UserDTO user) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
+    @PatchMapping("{id}") //TODO valid
+    public ResponseEntity<?> patchUser(@PathVariable Long id, @RequestBody @JsonView(Write.class) UserDTO user) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
         UserDTO userFromDB = getFromDbIfExist(id, user);
-        User mappedUser = mapper.toUserAndCopyNonNullFields(userFromDB, user);
-        manager.save(mappedUser);
+        mapper.updateUserFromUserDto(user, userFromDB);
+        manager.save(mapper.toUser(userFromDB));
         return ResponseEntity.noContent().build();
     }
 
@@ -96,13 +91,13 @@ public class UserController {
         return userById;
     }
 
-    @DeleteMapping("/users")
+    @DeleteMapping
     public ResponseEntity<?> deleteUsers() {
         manager.deleteAll();
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable Long id) throws UserByIdNotFoundException {
         manager.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
         manager.deleteById(id);

@@ -1,12 +1,10 @@
 package pl.vemu.sociely.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -15,6 +13,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     public User(String name, String surname, String email, String password) {
@@ -25,13 +24,13 @@ public class User {
     }
 
 //    @Default
-    public User(Long id, String name, String surname, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-    }
+//    public User(Long id, String name, String surname, String email, String password) {
+//        this.id = id;
+//        this.name = name;
+//        this.surname = surname;
+//        this.email = email;
+//        this.password = password;
+//    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +52,9 @@ public class User {
             columnDefinition = "char(60)"
     )
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
 
     @Override
     public boolean equals(Object o) {

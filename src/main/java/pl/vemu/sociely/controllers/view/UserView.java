@@ -11,17 +11,18 @@ import com.vaadin.flow.router.Route;
 import pl.vemu.sociely.controllers.UserController;
 import pl.vemu.sociely.entities.UserDTO;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
+import pl.vemu.sociely.mappers.View.Read;
 
 import java.util.List;
 
-@Route("")
-public class UserViewController extends VerticalLayout {
+@Route("users")
+public class UserView extends VerticalLayout {
 
     private final UserController controller;
-    @JsonView(UserDTO.Read.class)
+    @JsonView(Read.class) // TODO???
     private final Grid<UserDTO> grid = new Grid<>();
 
-    public UserViewController(UserController controller) {
+    public UserView(UserController controller) {
         this.controller = controller;
         refreshUsers();
         add(
@@ -60,23 +61,4 @@ public class UserViewController extends VerticalLayout {
         }
         );
     }
-
-    /*@GetMapping
-    public String getUsers(Model model) {
-        Page<UserDTO> users = controller.getUsers(null);
-        model.addAttribute("users", users.getContent());
-        return "users";
-    }
-
-    @DeleteMapping
-    public String deleteUser(@RequestParam Long id) throws UserByIdNotFoundException {
-        controller.deleteUserById(id);
-        return "redirect:/";
-    }
-
-    @PostMapping
-    public String addUser(@ModelAttribute *//*@JsonView(UserDTO.Write.class)*//* UserDTO userDTO) throws UserWithEmailAlreadyExistException {
-        controller.addUser(userDTO);
-        return "redirect:/";
-    }*/
 }

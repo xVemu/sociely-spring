@@ -15,32 +15,32 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserManager {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
 
     private final UserMapper mapper;
 
     public Page<UserDTO> findAll(Pageable pageable) {
-        return userRepository.findAllAsDTO(pageable);
+        return repository.findAllAsDTO(pageable);
     }
 
     public Optional<UserDTO> findById(Long id) {
-        return userRepository.findByIdAsDTO(id);
+        return repository.findByIdAsDTO(id);
     }
 
     public Optional<UserDTO> findByEmail(String email) {
-        return userRepository.findByEmailAsDTO(email);
+        return repository.findByEmailAsDTO(email);
     }
 
     public UserDTO save(User user) {
-        return mapper.toUserDTO(userRepository.save(user));
+        return mapper.toUserDTO(repository.save(user));
     }
 
     public void deleteAll() {
-        userRepository.deleteAll();
+        repository.deleteAll();
     }
 
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
 }
