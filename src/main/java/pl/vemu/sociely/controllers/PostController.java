@@ -11,11 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.vemu.sociely.entities.Post;
-import pl.vemu.sociely.entities.PostDTO;
+import pl.vemu.sociely.entities.dtos.PostDTO;
 import pl.vemu.sociely.managers.PostManager;
 import pl.vemu.sociely.mappers.PostMapper;
-import pl.vemu.sociely.mappers.View.Read;
-import pl.vemu.sociely.mappers.View.Write;
+import pl.vemu.sociely.utils.View.Read;
+import pl.vemu.sociely.utils.View.Write;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -27,6 +27,8 @@ public class PostController {
 
     private final PostManager manager;
     private final PostMapper mapper;
+
+    //TODO handle errors
 
     @JsonView(Read.class)
     @GetMapping

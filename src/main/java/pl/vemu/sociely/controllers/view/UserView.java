@@ -9,9 +9,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import pl.vemu.sociely.controllers.UserController;
-import pl.vemu.sociely.entities.UserDTO;
+import pl.vemu.sociely.entities.dtos.UserDTO;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
-import pl.vemu.sociely.mappers.View.Read;
+import pl.vemu.sociely.utils.View.Read;
 
 import java.util.List;
 

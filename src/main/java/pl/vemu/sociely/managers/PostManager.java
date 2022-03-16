@@ -7,10 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.vemu.sociely.entities.Post;
-import pl.vemu.sociely.entities.PostDTO;
+import pl.vemu.sociely.entities.dtos.PostDTO;
 import pl.vemu.sociely.mappers.PostMapper;
-import pl.vemu.sociely.mappers.View.Read;
 import pl.vemu.sociely.repositories.PostRepository;
+import pl.vemu.sociely.utils.View.Read;
 
 @Service
 @RequiredArgsConstructor

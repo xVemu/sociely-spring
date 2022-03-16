@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.vemu.sociely.entities.User;
-import pl.vemu.sociely.entities.UserDTO;
+import pl.vemu.sociely.entities.dtos.UserDTO;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
 import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
 import pl.vemu.sociely.managers.UserManager;
@@ -68,8 +68,8 @@ class UserControllerTest {
 
     @Test
     public void addUser() throws UserWithEmailAlreadyExistException {
-        UserDTO user = new UserDTO("Created2", "User4", "Email@email.pl", "created3");
-        UserDTO userWithDuplicatedMail = new UserDTO("Created3", "User4", "email@siema.pl", "created3");
+        UserDTO user = new UserDTO("Created2", "User4", "Email@email.pl", "created3", "admin");
+        UserDTO userWithDuplicatedMail = new UserDTO("Created3", "User4", "email@siema.pl", "created3", "admin");
         ResponseEntity<UserDTO> request = controller.addUser(user);
 
         assertNotNull(request.getBody());
@@ -84,8 +84,8 @@ class UserControllerTest {
 
     @Test
     void putUser() throws UserWithEmailAlreadyExistException, UserByIdNotFoundException {
-        UserDTO user = new UserDTO("Put", "Put", "Put@email.pl", "Put");
-        UserDTO userWithDuplicatedMail = new UserDTO("Put", "Put", "email2@siema.pl", "Put");
+        UserDTO user = new UserDTO("Put", "Put", "Put@email.pl", "Put", "admin");
+        UserDTO userWithDuplicatedMail = new UserDTO("Put", "Put", "email2@siema.pl", "Put", "admin");
         ResponseEntity<?> responseEntity = controller.putUser(user1.id(), user);
         UserDTO userFromDB = manager.findById(user1.id()).get();
 

@@ -11,8 +11,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import pl.vemu.sociely.controllers.PostController;
-import pl.vemu.sociely.entities.PostDTO;
-import pl.vemu.sociely.mappers.View;
+import pl.vemu.sociely.entities.dtos.PostDTO;
+import pl.vemu.sociely.utils.View;
 
 import java.util.Date;
 import java.util.List;
@@ -75,7 +75,7 @@ public class PostView extends VerticalLayout {
         Button button = new Button("Zapisz");
         button.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
         button.addClickListener(buttonClickEvent -> {
-            PostDTO postToSave = new PostDTO(textArea.getValue(), new Date(), 1L);
+            PostDTO postToSave = new PostDTO(textArea.getValue(), new Date(), 11L);
             controller.addPost(postToSave);
             refreshPosts();
             dialog.close();

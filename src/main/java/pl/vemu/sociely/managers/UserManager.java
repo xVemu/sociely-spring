@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.vemu.sociely.entities.User;
-import pl.vemu.sociely.entities.UserDTO;
+import pl.vemu.sociely.entities.dtos.UserDTO;
 import pl.vemu.sociely.mappers.UserMapper;
 import pl.vemu.sociely.repositories.UserRepository;
 

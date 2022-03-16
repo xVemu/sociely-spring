@@ -4,7 +4,7 @@ import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.vemu.sociely.entities.User;
-import pl.vemu.sociely.entities.UserDTO;
+import pl.vemu.sociely.entities.dtos.UserDTO;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {

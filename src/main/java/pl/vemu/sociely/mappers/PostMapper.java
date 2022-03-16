@@ -2,7 +2,7 @@ package pl.vemu.sociely.mappers;
 
 import org.mapstruct.*;
 import pl.vemu.sociely.entities.Post;
-import pl.vemu.sociely.entities.PostDTO;
+import pl.vemu.sociely.entities.dtos.PostDTO;
 
 @Mapper(componentModel = "spring")
 public interface PostMapper {

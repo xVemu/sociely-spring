@@ -11,13 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.vemu.sociely.entities.User;
-import pl.vemu.sociely.entities.UserDTO;
+import pl.vemu.sociely.entities.dtos.UserDTO;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
 import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
 import pl.vemu.sociely.managers.UserManager;
 import pl.vemu.sociely.mappers.UserMapper;
-import pl.vemu.sociely.mappers.View.Read;
-import pl.vemu.sociely.mappers.View.Write;
+import pl.vemu.sociely.utils.View.Read;
+import pl.vemu.sociely.utils.View.Write;
 
 import javax.validation.Valid;
 import java.net.URI;

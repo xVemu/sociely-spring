@@ -1,4 +1,4 @@
-package pl.vemu.sociely.mappers;
+package pl.vemu.sociely.utils;
 
 public class View {
     public static class Read extends Normal {
