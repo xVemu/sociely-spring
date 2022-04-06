@@ -1,6 +1,5 @@
 package pl.vemu.sociely.controllers.view;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -10,9 +9,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinServletService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import pl.vemu.sociely.controllers.PostController;
+import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.entities.dtos.PostDTO;
-import pl.vemu.sociely.utils.View;
 
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 public class PostView extends VerticalLayout {
 
     private final PostController controller;
-    @JsonView(View.Read.class) // TODO???
+
     private final Grid<PostDTO> grid = new Grid<>();
 
     public PostView(PostController controller) {
@@ -75,8 +76,9 @@ public class PostView extends VerticalLayout {
         Button button = new Button("Zapisz");
         button.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
         button.addClickListener(buttonClickEvent -> {
-            PostDTO postToSave = new PostDTO(textArea.getValue(), new Date(), 11L);
-            controller.addPost(postToSave);
+            PostDTO postToSave = new PostDTO(textArea.getValue(), new Date(), null);
+            User user = (User) ((UsernamePasswordAuthenticationToken) VaadinServletService.getCurrentServletRequest().getUserPrincipal()).getPrincipal();
+            controller.addPost(postToSave, user);
             refreshPosts();
             dialog.close();
         });

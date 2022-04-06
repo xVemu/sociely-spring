@@ -12,7 +12,7 @@ import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.entities.dtos.UserDTO;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
 import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
-import pl.vemu.sociely.managers.UserManager;
+import pl.vemu.sociely.services.UserService;
 
 import java.util.Optional;
 
@@ -23,7 +23,7 @@ class UserControllerTest {
 
     //    TODO mock
     @Autowired
-    private UserManager manager;
+    private UserService manager;
 
     @Autowired
     private UserController controller;

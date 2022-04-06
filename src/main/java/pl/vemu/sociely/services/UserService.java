@@ -1,4 +1,4 @@
-package pl.vemu.sociely.managers;
+package pl.vemu.sociely.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserManager {
+public class UserService {
 
     private final UserRepository repository;
 

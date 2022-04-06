@@ -2,6 +2,7 @@ package pl.vemu.sociely.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -23,11 +24,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/users").hasAuthority(Roles.ADMIN.getAuthority())
+                .antMatchers(HttpMethod.GET, "/api/users").hasAuthority(Roles.ADMIN.getAuthority())
                 .and()
-                .formLogin().permitAll().defaultSuccessUrl("/api/posts")
+                .formLogin().permitAll().defaultSuccessUrl("/posts") // TODO only for anonymous
                 .and()
-                .logout().permitAll()
+                .logout().permitAll() // TODO only for logged
                 .and()
                 .csrf().disable(); //TODO delete on production?
     }
@@ -57,7 +58,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // (production mode) static resources // (4)
                 "/frontend-es5/**", "/frontend-es6/**",
 
-                "/h2-console/**"
+                "/h2-console/**",
+
+                // open api
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html"
         );
     }
 }

@@ -1,4 +1,4 @@
-package pl.vemu.sociely.managers;
+package pl.vemu.sociely.services;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -14,7 +14,7 @@ import pl.vemu.sociely.utils.View.Read;
 
 @Service
 @RequiredArgsConstructor
-public class PostManager {
+public class PostService {
 
     private final PostRepository repository;
     private final PostMapper mapper;

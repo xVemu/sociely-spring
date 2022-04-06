@@ -16,10 +16,10 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const BuildStatusPlugin = require('@vaadin/build-status-plugin');
 const ThemeLiveReloadPlugin = require('@vaadin/theme-live-reload-plugin');
 const {
-  ApplicationThemePlugin,
-  processThemeResources,
-  extractThemeName,
-  findParentThemes
+    ApplicationThemePlugin,
+    processThemeResources,
+    extractThemeName,
+    findParentThemes
 } = require('@vaadin/application-theme-plugin');
 
 const path = require('path');
@@ -111,17 +111,17 @@ if (watchDogPort) {
 // Compute the entries that webpack have to visit
 const webPackEntries = {};
 if (useClientSideIndexFileForBootstrapping) {
-  webPackEntries.bundle = clientSideIndexEntryPoint;
-  const dirName = path.dirname(fileNameOfTheFlowGeneratedMainEntryPoint);
-  const baseName = path.basename(fileNameOfTheFlowGeneratedMainEntryPoint, '.js');
-  if (
-      fs
-          .readdirSync(dirName)
-          .filter((fileName) => !fileName.startsWith(baseName) && fileName.endsWith('.js') && fileName.includes('-')).length
-  ) {
-    // if there are vaadin exported views, add a second entry
-    webPackEntries.export = fileNameOfTheFlowGeneratedMainEntryPoint;
-  }
+    webPackEntries.bundle = clientSideIndexEntryPoint;
+    const dirName = path.dirname(fileNameOfTheFlowGeneratedMainEntryPoint);
+    const baseName = path.basename(fileNameOfTheFlowGeneratedMainEntryPoint, '.js');
+    if (
+        fs
+            .readdirSync(dirName)
+            .filter((fileName) => !fileName.startsWith(baseName) && fileName.endsWith('.js') && fileName.includes('-')).length
+    ) {
+        // if there are vaadin exported views, add a second entry
+        webPackEntries.export = fileNameOfTheFlowGeneratedMainEntryPoint;
+    }
 } else {
   webPackEntries.bundle = fileNameOfTheFlowGeneratedMainEntryPoint;
 }
@@ -148,7 +148,7 @@ const swManifestTransform = (manifestEntries) => {
       manifest.push(appShellManifestEntry);
     }
   }
-  return {manifest, warnings};
+    return {manifest, warnings};
 };
 
 const createServiceWorkerPlugin = function () {
@@ -321,57 +321,57 @@ module.exports = {
     maxAssetSize: 2097152 // 2MB
   },
   plugins: [
-    new ApplicationThemePlugin(themeOptions),
+      new ApplicationThemePlugin(themeOptions),
 
-    ...(devMode && themeName
-        ? [
-          new ExtraWatchWebpackPlugin({
-            files: [],
-            dirs: themeWatchFolders
-          }),
-          new ThemeLiveReloadPlugin(processThemeResourcesCallback)
-        ]
-        : []),
+      ...(devMode && themeName
+          ? [
+              new ExtraWatchWebpackPlugin({
+                  files: [],
+                  dirs: themeWatchFolders
+              }),
+              new ThemeLiveReloadPlugin(processThemeResourcesCallback)
+          ]
+          : []),
 
-    function (compiler) {
-      // V14 bootstrapping needs the bundle names
-      compiler.hooks.afterEmit.tapAsync("FlowStatsHelper", (compilation, done) => {
-        let miniStats = {
-          assetsByChunkName: compilation.getStats().toJson().assetsByChunkName
-        };
-        if (!devMode) {
-          fs.writeFile(statsFile, JSON.stringify(miniStats, null, 1),
-              () => done());
-        } else {
-          stats = miniStats;
-          done();
-        }
-      });
-    },
+      function (compiler) {
+          // V14 bootstrapping needs the bundle names
+          compiler.hooks.afterEmit.tapAsync("FlowStatsHelper", (compilation, done) => {
+              let miniStats = {
+                  assetsByChunkName: compilation.getStats().toJson().assetsByChunkName
+              };
+              if (!devMode) {
+                  fs.writeFile(statsFile, JSON.stringify(miniStats, null, 1),
+                      () => done());
+              } else {
+                  stats = miniStats;
+                  done();
+              }
+          });
+      },
 
-    // Includes JS output bundles into "index.html"
-    useClientSideIndexFileForBootstrapping &&
-    new HtmlWebpackPlugin({
-      template: clientSideIndexHTML,
-      filename: indexHtmlPath,
-      inject: 'head',
-      scriptLoading: 'defer',
-      chunks: ['bundle']
-    }),
+      // Includes JS output bundles into "index.html"
+      useClientSideIndexFileForBootstrapping &&
+      new HtmlWebpackPlugin({
+          template: clientSideIndexHTML,
+          filename: indexHtmlPath,
+          inject: 'head',
+          scriptLoading: 'defer',
+          chunks: ['bundle']
+      }),
 
-    // Service worker for offline
-    pwaEnabled && createServiceWorkerPlugin(),
+      // Service worker for offline
+      pwaEnabled && createServiceWorkerPlugin(),
 
-    // Generate compressed bundles when not devMode
-    !devMode && new CompressionPlugin(),
+      // Generate compressed bundles when not devMode
+      !devMode && new CompressionPlugin(),
 
-    enableTypeScript &&
-    new ForkTsCheckerWebpackPlugin({
-      typescript: {
-        configFile: tsconfigJsonFile
-      }
-    }),
+      enableTypeScript &&
+      new ForkTsCheckerWebpackPlugin({
+          typescript: {
+              configFile: tsconfigJsonFile
+          }
+      }),
 
-    new BuildStatusPlugin()
+      new BuildStatusPlugin()
   ].filter(Boolean)
 };
