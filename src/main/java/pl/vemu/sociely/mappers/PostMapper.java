@@ -11,6 +11,7 @@ public interface PostMapper {
     @Mapping(source = "userSurname", target = "user.surname")
     @Mapping(source = "userEmail", target = "user.email")
     @Mapping(source = "userId", target = "user.id")
+    @Mapping(source = "userRole", target = "user.role")
     Post toPost(PostDTO postDTO);
 
     @InheritInverseConfiguration(name = "toPost")

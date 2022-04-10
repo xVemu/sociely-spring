@@ -7,7 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication/*(exclude = {
         SecurityAutoConfiguration.class,
-        ErrorMvcAutoConfiguration.class // fixes vaadin's reloading
 })*/
 public class Main {
 

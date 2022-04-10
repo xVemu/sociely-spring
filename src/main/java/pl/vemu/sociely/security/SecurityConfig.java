@@ -34,30 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers(
-                "/VAADIN/**",
-
-                // the standard favicon URI
-                "/favicon.ico",
-
-                // the robots exclusion standard
-                "/robots.txt",
-
-                // web application manifest // (2)
-                "/manifest.webmanifest",
-                "/sw.js",
-                "/offline-page.html",
-
-                // (development mode) static resources // (3)
-                "/frontend/**",
-
-                // (development mode) webjars // (3)
-                "/webjars/**",
-
-                // (production mode) static resources // (4)
-                "/frontend-es5/**", "/frontend-es6/**",
-
                 "/h2-console/**",
 
                 // open api

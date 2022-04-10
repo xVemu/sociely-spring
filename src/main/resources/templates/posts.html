@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Posty</title>
+    <link href='/webjars/bootstrap/5.1.3/css/bootstrap.min.css' rel='stylesheet'>
+</head>
+<body th:inline="text">
+<div class="container pt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-10 card mb-3">
+            <div class="card-body">
+                <form method="post" th:action="@{/posts}" th:object="${post}">
+                    <div class="mb-3">
+                        <label class="form-label" for="postText">Treść posta: </label>
+                        <textarea class="form-control" id="postText" th:field="*{text}"></textarea>
+                    </div>
+                    <button class="btn btn-primary mb-3" type="submit">Opublikuj post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center" th:each="post : ${posts}">
+        <div class="card mb-3 col-md-6 col-10">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${post.getUserEmail()}"></h5>
+                <h6 class="card-subtitle" th:text="${post.getCreationDate()}"></h6>
+                <p class="card-text" th:text="${post.getText()}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+</body>
+</html>

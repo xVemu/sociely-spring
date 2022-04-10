@@ -51,7 +51,7 @@ public class PostController {
         PostDTO savedPost = manager.save(newPost);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(savedPost.id())
+                .buildAndExpand(savedPost.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(savedPost);
     }
