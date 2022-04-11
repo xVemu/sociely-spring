@@ -11,9 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pl.vemu.sociely.dtos.PostDTO;
 import pl.vemu.sociely.entities.Post;
 import pl.vemu.sociely.entities.User;
-import pl.vemu.sociely.entities.dtos.PostDTO;
 import pl.vemu.sociely.mappers.PostMapper;
 import pl.vemu.sociely.services.PostService;
 import pl.vemu.sociely.utils.View.Read;
@@ -27,7 +27,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class PostController {
 
-    private final PostService manager;
+    private final PostService service;
     private final PostMapper mapper;
 
     //TODO handle errors
@@ -40,7 +40,7 @@ public class PostController {
                     @SortDefault(sort = "creationDate", direction = Sort.Direction.ASC)
             )
                     Pageable pageable) {
-        return manager.findAll(pageable);
+        return service.getPageablePosts(pageable);
     }
 
     @JsonView(Read.class)
@@ -48,7 +48,7 @@ public class PostController {
     public ResponseEntity<PostDTO> addPost(@RequestBody @Valid @JsonView(Write.class) PostDTO postDTO, @AuthenticationPrincipal User principal) {
         Post newPost = mapper.toPost(postDTO);
         newPost.setUser(principal);
-        PostDTO savedPost = manager.save(newPost);
+        PostDTO savedPost = service.save(newPost);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(savedPost.getId())
@@ -58,7 +58,7 @@ public class PostController {
 
     @DeleteMapping
     public ResponseEntity<?> deletePostById(Long id) {
-        manager.deleteById(id);
+        service.deleteById(id);
         return ResponseEntity.ok().build();
     }
 }

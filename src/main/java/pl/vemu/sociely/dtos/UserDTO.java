@@ -1,4 +1,4 @@
-package pl.vemu.sociely.entities.dtos;
+package pl.vemu.sociely.dtos;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
