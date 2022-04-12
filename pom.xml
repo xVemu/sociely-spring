@@ -209,7 +209,6 @@
             <id>prod</id>
             <properties>
                 <activatedProperties>prod</activatedProperties>
-                <vaadin.productionMode>true</vaadin.productionMode>
             </properties>
             <dependencies>
                 <dependency>
@@ -219,53 +218,27 @@
                 </dependency>
             </dependencies>
             <build>
-
-                <!-- Exclude the sources in "src/main/resources/includes" -->
-                <!-- Include the transpiled files in "target/generated-resources/includes" -->
-                <resources>
-                    <resource>
-                        <directory>${project.basedir}/src/main/resources</directory>
-                        <excludes>
-                            <exclude>includes/**/*.js</exclude>
-                        </excludes>
-                    </resource>
-                    <resource>
-                        <directory>${project.basedir}/target/generated-resources</directory>
-                    </resource>
-                </resources>
-
-                <!-- Transpiled all sources from               -->
-                <!--     "src/main/resources/includes"         -->
-                <!--  to                                       -->
-                <!--     "target/generated-resources/includes" -->
                 <plugins>
                     <plugin>
                         <groupId>com.github.blutorange</groupId>
                         <artifactId>closure-compiler-maven-plugin</artifactId>
                         <version>2.22.0</version>
-                        <configuration>
-                            <!-- Base configuration for all executions (bundles) -->
-                            <baseSourceDir>${project.basedir}/src/main/resources</baseSourceDir>
-                            <baseTargetDir>${project.build.directory}/generated-resources</baseTargetDir>
-                        </configuration>
                         <executions>
-                            <!-- Process all files in the "includes" directory individually-->
                             <execution>
                                 <id>default-minify</id>
                                 <configuration>
                                     <encoding>UTF-8</encoding>
-                                    <sourceDir>includes</sourceDir>
-                                    <targetDir>includes</targetDir>
+                                    <baseSourceDir>${basedir}/src/main/resources</baseSourceDir>
+                                    <baseTargetDir>${project.build.directory}/${project.build.finalName}</baseTargetDir>
+                                    <sourceDir>js</sourceDir>
+                                    <targetDir>js</targetDir>
                                     <includes>
                                         <include>**/*.js</include>
                                     </includes>
-                                    <skipMerge>true</skipMerge>
-                                    <closureLanguageOut>ECMASCRIPT5</closureLanguageOut>
                                 </configuration>
                                 <goals>
                                     <goal>minify</goal>
                                 </goals>
-                                <phase>generate-resources</phase>
                             </execution>
                         </executions>
                     </plugin>
