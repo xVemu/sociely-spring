@@ -13,9 +13,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-    @Query("SELECT new pl.vemu.sociely.dtos.UserDTO(id, name, surname, email, password, role) FROM User WHERE email = ?1")
-    Optional<UserDTO> findByEmailAsDTO(String email);
-
     @Query("SELECT new pl.vemu.sociely.dtos.UserDTO(id, name, surname, email, password, role) FROM User WHERE id = ?1")
     Optional<UserDTO> findByIdAsDTO(Long id);
 

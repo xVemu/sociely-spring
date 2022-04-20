@@ -5,11 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.vemu.sociely.dtos.UserDTO;
-import pl.vemu.sociely.entities.User;
+import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
+import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
 import pl.vemu.sociely.mappers.UserMapper;
 import pl.vemu.sociely.repositories.UserRepository;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,27 +18,30 @@ public class UserService {
 
     private final UserMapper mapper;
 
-    public Page<UserDTO> findAll(Pageable pageable) {
+    public Page<UserDTO> getAll(Pageable pageable) {
         return repository.findAllAsDTO(pageable);
     }
 
-    public Optional<UserDTO> findById(Long id) {
-        return repository.findByIdAsDTO(id);
+    public UserDTO getById(Long id) throws UserByIdNotFoundException {
+        return repository.findByIdAsDTO(id).orElseThrow(() -> new UserByIdNotFoundException(id));
     }
 
-    public Optional<UserDTO> findByEmail(String email) {
-        return repository.findByEmailAsDTO(email);
+    public UserDTO add(UserDTO userDTO) throws UserWithEmailAlreadyExistException {
+        var userByEmail = repository.findByEmail(userDTO.email());
+        if (userByEmail.isPresent()) throw new UserWithEmailAlreadyExistException(userDTO.email());
+        var mappedUser = mapper.toUser(userDTO);
+        return mapper.toUserDTO(repository.save(mappedUser));
     }
 
-    public UserDTO save(User user) {
-        return mapper.toUserDTO(repository.save(user));
+    public UserDTO updateUser(Long id, UserDTO userDTO) throws UserByIdNotFoundException {
+        var userFromDb = repository.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
+        var updatedUser = mapper.updateUserDtoFromUserDto(userDTO, userFromDb);
+        var user = repository.save(updatedUser);
+        return mapper.toUserDTO(user);
     }
 
-    public void deleteAll() {
-        repository.deleteAll();
-    }
-
-    public void deleteById(Long id) {
+    public void delete(Long id) throws UserByIdNotFoundException {
+        repository.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
         repository.deleteById(id);
     }
 

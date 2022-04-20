@@ -2,16 +2,16 @@ package pl.vemu.sociely.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import pl.vemu.sociely.repositories.UserRepository;
-import pl.vemu.sociely.utils.Roles;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserRepository userRepository;
@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/users").hasAuthority(Roles.ADMIN.getAuthority())
+//                .antMatchers(HttpMethod.GET, "/api/users").hasAuthority(Roles.ADMIN.getAuthority())
                 .and()
                 .formLogin().permitAll().defaultSuccessUrl("/posts") // TODO only for anonymous
                 .and()

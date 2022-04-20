@@ -1,6 +1,5 @@
 package pl.vemu.sociely.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +15,6 @@ import pl.vemu.sociely.entities.Post;
 import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.mappers.PostMapper;
 import pl.vemu.sociely.services.PostService;
-import pl.vemu.sociely.utils.View.Read;
-import pl.vemu.sociely.utils.View.Write;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -32,7 +29,6 @@ public class PostController {
 
     //TODO handle errors
 
-    @JsonView(Read.class)
     @GetMapping
     public Page<PostDTO> getPosts(
             @PageableDefault(size = 20)
@@ -43,9 +39,8 @@ public class PostController {
         return service.getPageablePosts(pageable);
     }
 
-    @JsonView(Read.class)
     @PostMapping
-    public ResponseEntity<PostDTO> addPost(@RequestBody @Valid @JsonView(Write.class) PostDTO postDTO, @AuthenticationPrincipal User principal) {
+    public ResponseEntity<PostDTO> addPost(@RequestBody @Valid PostDTO postDTO, @AuthenticationPrincipal User principal) {
         Post newPost = mapper.toPost(postDTO);
         newPost.setUser(principal);
         PostDTO savedPost = service.save(newPost);
@@ -57,8 +52,7 @@ public class PostController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deletePostById(Long id) {
+    public void deletePostById(Long id) {
         service.deleteById(id);
-        return ResponseEntity.ok().build();
     }
 }

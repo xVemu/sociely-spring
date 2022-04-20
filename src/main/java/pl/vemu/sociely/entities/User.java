@@ -39,7 +39,8 @@ public class User implements UserDetails {
 
     @Column(
             nullable = false,
-            length = 320
+            length = 320,
+            unique = true
     )
     private String email;
 
