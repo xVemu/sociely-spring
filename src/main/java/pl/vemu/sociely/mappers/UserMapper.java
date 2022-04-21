@@ -3,19 +3,19 @@ package pl.vemu.sociely.mappers;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import pl.vemu.sociely.dtos.UserDTO;
+import pl.vemu.sociely.dtos.UserDtoRequest;
+import pl.vemu.sociely.dtos.UserDtoResponse;
 import pl.vemu.sociely.entities.User;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class UserMapper {
 
     @Autowired
     protected BCryptPasswordEncoder encoder;
 
-    //    java: Unmapped target property: "posts". TODO
-    public abstract User toUser(UserDTO userDTO);
+    public abstract User toUser(UserDtoRequest userDtoRequest);
 
-    public abstract UserDTO toUserDTO(User user);
+    public abstract UserDtoResponse toUserDto(User user);
 
     @AfterMapping
     protected void encryptPassword(@MappingTarget User user) {
@@ -23,6 +23,6 @@ public abstract class UserMapper {
     }
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract User updateUserDtoFromUserDto(UserDTO userDTO, @MappingTarget User user);
+    public abstract User updateUserDtoFromUserDto(UserDtoRequest userDtoRequest, @MappingTarget User user);
 
 }

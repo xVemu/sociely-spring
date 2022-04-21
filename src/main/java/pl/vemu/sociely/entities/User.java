@@ -54,7 +54,7 @@ public class User implements UserDetails {
             nullable = false
     )
     @Enumerated(EnumType.STRING)
-    private Roles role;
+    private Roles role = Roles.USER;
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
