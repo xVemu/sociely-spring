@@ -9,7 +9,8 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
+import pl.vemu.sociely.dtos.UserDtoPatch;
 import pl.vemu.sociely.dtos.UserDtoRequest;
 import pl.vemu.sociely.dtos.UserDtoResponse;
 import pl.vemu.sociely.entities.User;
@@ -18,7 +19,6 @@ import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
 import pl.vemu.sociely.services.UserService;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @RestController
 @RequestMapping("/api/users")
@@ -45,9 +45,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDtoResponse> addUser(@RequestBody @Valid UserDtoRequest userDto) throws UserWithEmailAlreadyExistException {
-        UserDtoResponse savedUser = service.add(userDto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+    public ResponseEntity<UserDtoResponse> addUser(@RequestBody @Valid UserDtoRequest userDto, UriComponentsBuilder uriComponentsBuilder) throws UserWithEmailAlreadyExistException {
+        var savedUser = service.add(userDto);
+        var uri = uriComponentsBuilder
                 .path("/{id}")
                 .buildAndExpand(savedUser.id())
                 .toUri();
@@ -55,13 +55,9 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<UserDtoResponse> updateUser(@PathVariable Long id, @RequestBody UserDtoRequest userDto) throws UserByIdNotFoundException {
-        UserDtoResponse updatedUser = service.updateUser(id, userDto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(updatedUser.id())
-                .toUri();
-        return ResponseEntity.created(uri).body(updatedUser);
+    public ResponseEntity<UserDtoResponse> updateUser(@PathVariable Long id, @RequestBody @Valid UserDtoPatch userDto, UriComponentsBuilder uriComponentsBuilder) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
+        var updatedUser = service.updateUser(id, userDto);
+        return ResponseEntity.created(uriComponentsBuilder.build().toUri()).body(updatedUser);
     }
 
     @DeleteMapping("{id}")

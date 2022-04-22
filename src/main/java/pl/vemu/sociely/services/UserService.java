@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.vemu.sociely.dtos.UserDtoPatch;
 import pl.vemu.sociely.dtos.UserDtoRequest;
 import pl.vemu.sociely.dtos.UserDtoResponse;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
@@ -34,9 +35,15 @@ public class UserService {
         return mapper.toUserDto(repository.save(mappedUser));
     }
 
-    public UserDtoResponse updateUser(Long id, UserDtoRequest userDtoRequest) throws UserByIdNotFoundException {
+    public UserDtoResponse updateUser(Long id, UserDtoPatch userDtoPatch) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
         var userFromDb = repository.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
-        var updatedUser = mapper.updateUserDtoFromUserDto(userDtoRequest, userFromDb);
+
+        // check if email doesn't belong to other user
+        var userByEmail = repository.findByEmail(userDtoPatch.email());
+        if (userByEmail.isPresent() && !userByEmail.get().equals(userFromDb))
+            throw new UserWithEmailAlreadyExistException(userDtoPatch.email());
+
+        var updatedUser = mapper.updateUserDtoFromUserDto(userDtoPatch, userFromDb);
         var user = repository.save(updatedUser);
         return mapper.toUserDto(user);
     }
