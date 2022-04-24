@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.vemu.sociely.dtos.UserDtoPatch;
 import pl.vemu.sociely.dtos.UserDtoRequest;
 import pl.vemu.sociely.dtos.UserDtoResponse;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
@@ -28,22 +27,22 @@ public class UserService {
         return repository.findByIdAsDTO(id).orElseThrow(() -> new UserByIdNotFoundException(id));
     }
 
-    public UserDtoResponse add(UserDtoRequest userDtoRequest) throws UserWithEmailAlreadyExistException {
-        var userByEmail = repository.findByEmail(userDtoRequest.email());
-        if (userByEmail.isPresent()) throw new UserWithEmailAlreadyExistException(userDtoRequest.email());
-        var mappedUser = mapper.toUser(userDtoRequest);
+    public UserDtoResponse add(UserDtoRequest userDto) throws UserWithEmailAlreadyExistException {
+        var userByEmail = repository.findByEmail(userDto.getEmail());
+        if (userByEmail.isPresent()) throw new UserWithEmailAlreadyExistException(userDto.getEmail());
+        var mappedUser = mapper.toUser(userDto);
         return mapper.toUserDto(repository.save(mappedUser));
     }
 
-    public UserDtoResponse updateUser(Long id, UserDtoPatch userDtoPatch) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
+    public UserDtoResponse updateUser(Long id, UserDtoRequest userDto) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
         var userFromDb = repository.findById(id).orElseThrow(() -> new UserByIdNotFoundException(id));
 
         // check if email doesn't belong to other user
-        var userByEmail = repository.findByEmail(userDtoPatch.email());
+        var userByEmail = repository.findByEmail(userDto.getEmail());
         if (userByEmail.isPresent() && !userByEmail.get().equals(userFromDb))
-            throw new UserWithEmailAlreadyExistException(userDtoPatch.email());
+            throw new UserWithEmailAlreadyExistException(userDto.getEmail());
 
-        var updatedUser = mapper.updateUserDtoFromUserDto(userDtoPatch, userFromDb);
+        var updatedUser = mapper.updateUserDtoFromUserDto(userDto, userFromDb);
         var user = repository.save(updatedUser);
         return mapper.toUserDto(user);
     }

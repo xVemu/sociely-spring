@@ -8,15 +8,16 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import pl.vemu.sociely.dtos.UserDtoPatch;
 import pl.vemu.sociely.dtos.UserDtoRequest;
 import pl.vemu.sociely.dtos.UserDtoResponse;
 import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFoundException;
 import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
 import pl.vemu.sociely.services.UserService;
+import pl.vemu.sociely.utils.PatchValid;
 
 import javax.validation.Valid;
 
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<UserDtoResponse> updateUser(@PathVariable Long id, @RequestBody @Valid UserDtoPatch userDto, UriComponentsBuilder uriComponentsBuilder) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
+    public ResponseEntity<UserDtoResponse> updateUser(@PathVariable Long id, @RequestBody @Validated(PatchValid.class) UserDtoRequest userDto, UriComponentsBuilder uriComponentsBuilder) throws UserByIdNotFoundException, UserWithEmailAlreadyExistException {
         var updatedUser = service.updateUser(id, userDto);
         return ResponseEntity.created(uriComponentsBuilder.build().toUri()).body(updatedUser);
     }
