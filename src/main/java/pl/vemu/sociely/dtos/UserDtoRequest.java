@@ -14,6 +14,8 @@ public class UserDtoRequest {
     @Size(min = 2, groups = {PatchValid.class})
     private String name;
 
+    @Size(min = 2, groups = {PatchValid.class})
+    @Size(min = 2)
     private String surname;
 
     @NotBlank
