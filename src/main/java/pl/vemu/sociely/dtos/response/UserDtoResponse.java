@@ -1,4 +1,4 @@
-package pl.vemu.sociely.dtos;
+package pl.vemu.sociely.dtos.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

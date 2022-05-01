@@ -6,7 +6,9 @@
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>Posty</title>
-    <link href='/webjars/bootstrap/5.1.3/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='/webjars/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container pt-5">
@@ -27,26 +29,25 @@
     <div class="row justify-content-center" th:each="post : ${posts.content}">
         <div class="card mb-3 col-md-6 col-10">
             <div class="card-body">
-                <h5 class="card-title" th:text="${post.getUserEmail()}"></h5>
-                <h6 class="card-subtitle" th:text="${post.getCreationDate()}"></h6>
-                <p class="card-text" th:text="${post.getText()}"></p>
+                <h5 class="card-title" th:inline="text" th:object="${post.user}"
+                    th:text="*{name} + ' ' + (*{surname} ?: '')"></h5>
+                <h6 class="card-subtitle" th:text="${post.creationDate}"></h6>
+                <p class="card-text" th:text="${post.text}"></p>
             </div>
         </div>
     </div>
     <div class="row justify-content-center">
         <div class="btn-group col-3">
             <a class="btn btn-primary"
-               th:href="@{/posts(page=${posts.number - 1})}"
-               th:unless="${posts.first}">&lt;</a>
+               th:href="@{/posts(page=${posts.previousPageable().getPageNumber()})}"
+               th:if="${posts.hasPrevious()}">&lt;</a>
             <a class="btn btn-primary"
                th:text="${posts.number}"></a>
             <a class="btn btn-primary"
-               th:href="@{/posts(page=${posts.number + 1})}"
-               th:unless="${posts.last}">&gt;</a>
+               th:href="@{/posts(page=${posts.nextPageable().getPageNumber()})}"
+               th:if="${posts.hasNext()}">&gt;</a>
         </div>
     </div>
 </div>
-
-<script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 </body>
 </html>

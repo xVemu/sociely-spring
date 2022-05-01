@@ -1,4 +1,4 @@
-package pl.vemu.sociely.dtos;
+package pl.vemu.sociely.dtos.request;
 
 import lombok.Data;
 import pl.vemu.sociely.utils.PatchValid;

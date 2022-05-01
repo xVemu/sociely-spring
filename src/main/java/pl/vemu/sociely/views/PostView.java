@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.vemu.sociely.dtos.PostDTO;
-import pl.vemu.sociely.entities.Post;
+import pl.vemu.sociely.dtos.request.PostDtoRequest;
 import pl.vemu.sociely.entities.User;
-import pl.vemu.sociely.mappers.PostMapper;
 import pl.vemu.sociely.services.PostService;
 
-import javax.servlet.http.HttpSession;
-import java.util.Date;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/posts")
@@ -28,9 +25,8 @@ import java.util.Date;
 public class PostView {
 
     private final PostService service;
-    private final PostMapper mapper;
 
-    @GetMapping()
+    @GetMapping
     public String getPosts(
             @PageableDefault(size = 3)
             @SortDefault.SortDefaults(
@@ -38,17 +34,19 @@ public class PostView {
             ) Pageable pageable,
             Model model
     ) {
-        model.addAttribute("posts", service.getPageablePosts(pageable));
-        model.addAttribute("post", new PostDTO());
+        model.addAttribute("posts", service.getAll(pageable));
+        model.addAttribute("post", new PostDtoRequest());
         return "posts";
     }
 
-    @PostMapping()
-    public String addPost(@ModelAttribute PostDTO postDTO, @AuthenticationPrincipal User principal, BindingResult errors, Model model, HttpSession session) {
-        Post newPost = mapper.toPost(postDTO);
-        newPost.setUser(principal);
-        newPost.setCreationDate(new Date());
-        service.save(newPost);
+    @PostMapping
+    public String addPost(
+            @Valid @ModelAttribute PostDtoRequest post,
+            @AuthenticationPrincipal User user,
+            BindingResult result
+    ) {
+        if (result.hasErrors()) return "posts";
+        service.add(post, user);
         return "redirect:/posts";
     }
 

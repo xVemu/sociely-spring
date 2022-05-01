@@ -8,8 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import pl.vemu.sociely.dtos.UserDtoRequest;
-import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExistException;
+import pl.vemu.sociely.dtos.request.UserDtoRequest;
+import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExist;
 import pl.vemu.sociely.services.UserService;
 
 import javax.validation.Valid;
@@ -33,7 +33,7 @@ public class UserView {
         try {
             service.add(user);
             return "redirect:/api/users";
-        } catch (UserWithEmailAlreadyExistException e) {
+        } catch (UserWithEmailAlreadyExist e) {
             e.printStackTrace();
             result.addError(new FieldError("user", "email", e.getMessage()));
             return "signup";
