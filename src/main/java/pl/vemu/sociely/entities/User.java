@@ -53,13 +53,6 @@ public class User implements UserDetails {
     @ToString.Exclude
     private List<Post> posts;
 
-    public User(String name, String surname, String email, String password) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -5,7 +5,7 @@
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <title>Posty</title>
+    <title>Posts</title>
     <link href='/webjars/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
@@ -17,10 +17,10 @@
             <div class="card-body">
                 <form method="post" th:action="@{/posts}" th:object="${post}">
                     <div class="mb-3">
-                        <label class="form-label" for="postText">Treść posta: </label>
+                        <label class="form-label" for="postText">Text: </label>
                         <textarea class="form-control" id="postText" th:field="*{text}"></textarea>
                     </div>
-                    <button class="btn btn-primary mb-3" type="submit">Opublikuj post</button>
+                    <button class="btn btn-primary mb-3" type="submit">Publish</button>
                 </form>
             </div>
         </div>

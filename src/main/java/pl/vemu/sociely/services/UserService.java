@@ -20,11 +20,11 @@ public class UserService {
     private final UserMapper mapper;
 
     public Page<UserDtoResponse> getAll(Pageable pageable) {
-        return repository.findAllAsDtos(pageable);
+        return repository.findAll(pageable).map(mapper::toUserDto);
     }
 
     public UserDtoResponse getById(Long id) throws UserByIdNotFound {
-        return repository.findByIdAsDto(id).orElseThrow(() -> new UserByIdNotFound(id));
+        return repository.findById(id).map(mapper::toUserDto).orElseThrow(() -> new UserByIdNotFound(id));
     }
 
     public UserDtoResponse add(UserDtoRequest userDto) throws UserWithEmailAlreadyExist {

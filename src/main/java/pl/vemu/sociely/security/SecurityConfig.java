@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.vemu.sociely.repositories.UserRepository;
 
 @Configuration
@@ -18,7 +19,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(email -> userRepository.findByEmail(email).get()); //TODO
+        auth.userDetailsService(
+                email -> userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email)));
     }
 
     @Override

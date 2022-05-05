@@ -2,7 +2,7 @@ package pl.vemu.sociely.mappers;
 
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.vemu.sociely.dtos.request.UserDtoRequest;
 import pl.vemu.sociely.dtos.response.UserDtoResponse;
 import pl.vemu.sociely.entities.User;
@@ -11,7 +11,11 @@ import pl.vemu.sociely.entities.User;
 public abstract class UserMapper {
 
     @Autowired
-    protected BCryptPasswordEncoder encoder;
+    protected PasswordEncoder encoder;
+
+    public final void setEncoder(PasswordEncoder encoder) {
+        this.encoder = encoder;
+    }
 
     public abstract User toUser(UserDtoRequest userDto);
 

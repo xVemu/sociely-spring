@@ -1,6 +1,8 @@
 package pl.vemu.sociely.dtos.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import pl.vemu.sociely.utils.PatchValid;
 
 import javax.validation.constraints.Email;
@@ -8,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserDtoRequest {
 
     @NotBlank

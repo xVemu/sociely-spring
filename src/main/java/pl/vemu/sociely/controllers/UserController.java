@@ -28,8 +28,6 @@ public class UserController {
 
     private final UserService service;
 
-//    TODO handle null request-body
-
     @GetMapping
     public Page<UserDtoResponse> getUsers(
             @PageableDefault(size = 20)
