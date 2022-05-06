@@ -13,7 +13,7 @@ import pl.vemu.sociely.exceptions.post.UnauthorizedToManipulatePost;
 import pl.vemu.sociely.mappers.PostMapper;
 import pl.vemu.sociely.repositories.PostRepository;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +37,7 @@ public class PostService {
     public PostDtoResponse add(PostDtoRequest postDto, User user) {
         var mappedPost = mapper.toPost(postDto);
         mappedPost.setUser(user);
-        mappedPost.setCreationDate(new Date());
+        mappedPost.setCreationDate(Instant.now());
         return mapper.toPostDTO(repository.save(mappedPost));
     }
 
@@ -47,7 +47,7 @@ public class PostService {
             User user
     ) throws PostByIdNotFound, UnauthorizedToManipulatePost {
         var postFromDb = repository.findById(id).orElseThrow(() -> new PostByIdNotFound(id));
-        if (!postFromDb.getUser().getId().equals(user.getId())) throw new UnauthorizedToManipulatePost();
+        if (!postFromDb.getUser().getId().equals(user.getId())) throw new UnauthorizedToManipulatePost(id);
 
         var updatedPost = mapper.updatePostFromPostDto(postDto, postFromDb);
         var post = repository.save(updatedPost);
@@ -56,7 +56,7 @@ public class PostService {
 
     public void deleteById(Long id, User user) throws PostByIdNotFound, UnauthorizedToManipulatePost {
         var post = repository.findById(id).orElseThrow(() -> new PostByIdNotFound(id));
-        if (!post.getUser().getId().equals(user.getId())) throw new UnauthorizedToManipulatePost();
+        if (!post.getUser().getId().equals(user.getId())) throw new UnauthorizedToManipulatePost(id);
         repository.deleteById(post.getId());
     }
 }

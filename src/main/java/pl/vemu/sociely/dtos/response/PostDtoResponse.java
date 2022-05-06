@@ -1,11 +1,11 @@
 package pl.vemu.sociely.dtos.response;
 
-import java.util.Date;
+import java.time.Instant;
 
 public record PostDtoResponse(
         Long id,
         String text,
-        Date creationDate,
+        Instant creationDate, /*TODO ZonedDateTime*/
         UserDtoResponse user
 ) {
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class UnauthorizedToManipulatePost extends Exception {
-    public UnauthorizedToManipulatePost() {
-        super("Unauthorized to manipulate the post");
+    public UnauthorizedToManipulatePost(Long id) {
+        super("Unauthorized to manipulate the post with id " + id);
     }
 }

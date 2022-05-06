@@ -50,7 +50,7 @@ public class UserService {
         return mapper.toUserDto(user);
     }
 
-    public void delete(Long id) throws UserByIdNotFound {
+    public void deleteById(Long id) throws UserByIdNotFound {
         repository.findById(id).orElseThrow(() -> new UserByIdNotFound(id));
         repository.deleteById(id);
     }

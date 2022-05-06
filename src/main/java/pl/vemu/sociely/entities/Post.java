@@ -1,13 +1,10 @@
 package pl.vemu.sociely.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Objects;
 
 @Getter
@@ -16,6 +13,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "posts")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Post {
 
     @Id
@@ -26,7 +24,7 @@ public class Post {
     private String text;
 
     @Column(nullable = false)
-    private Date creationDate;
+    private Instant creationDate;
 
     @ManyToOne
     @JoinColumn(nullable = false)

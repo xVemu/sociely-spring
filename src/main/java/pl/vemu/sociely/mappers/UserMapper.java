@@ -13,10 +13,6 @@ public abstract class UserMapper {
     @Autowired
     protected PasswordEncoder encoder;
 
-    public final void setEncoder(PasswordEncoder encoder) {
-        this.encoder = encoder;
-    }
-
     public abstract User toUser(UserDtoRequest userDto);
 
     public abstract UserDtoResponse toUserDto(User user);

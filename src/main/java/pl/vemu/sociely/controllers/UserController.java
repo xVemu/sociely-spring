@@ -72,7 +72,7 @@ public class UserController {
             @PathVariable Long id,
             @AuthenticationPrincipal User principal
     ) throws UserByIdNotFound {
-        service.delete(id);
+        service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
