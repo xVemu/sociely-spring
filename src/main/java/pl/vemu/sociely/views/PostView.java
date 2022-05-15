@@ -18,6 +18,7 @@ import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.services.PostService;
 
 import javax.validation.Valid;
+import java.util.TimeZone;
 
 @Controller
 @RequestMapping("/posts")
@@ -32,10 +33,12 @@ public class PostView {
             @SortDefault.SortDefaults(
                     @SortDefault(sort = "creationDate", direction = Sort.Direction.ASC)
             ) Pageable pageable,
-            Model model
+            Model model,
+            TimeZone timezone
     ) {
         model.addAttribute("posts", service.getAll(pageable));
         model.addAttribute("post", new PostDtoRequest());
+        model.addAttribute("timezone", timezone);
         return "posts";
     }
 

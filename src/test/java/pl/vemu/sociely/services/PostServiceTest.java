@@ -19,7 +19,9 @@ import pl.vemu.sociely.mappers.UserMapper;
 import pl.vemu.sociely.repositories.PostRepository;
 import pl.vemu.sociely.utils.Roles;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -32,17 +34,18 @@ import static org.mockito.Mockito.*;
 class PostServiceTest {
 
     private final List<Post> posts = new ArrayList<>(
-            List.of(new Post(1L, "I'll scout ahead!", Instant.parse("2007-12-03T10:15:30.00Z"),
+            List.of(new Post(1L, "I'll scout ahead!", LocalDateTime.parse("2007-12-03T10:15:30.00"),
                              new User(3L, "Jesse", "Pinkman", "elisabeth.goldner@yahoo.com",
                                       "$2a$12$oCXMCYmgaI/cVtUnUvcR3uSqAf6P8O9GQ.5rFjBuQb1Cl4wu5X1eC" /*password: uz2iov8599*/,
                                       Roles.USER, null
                              )
-            ), new Post(2L, "I suppose you're expecting some inBEARable pun?", Instant.parse("2022-05-06T17:15:30.00Z"),
+            ), new Post(2L, "I suppose you're expecting some inBEARable pun?",
+                        LocalDateTime.parse("2022-05-06T17:15:30.00"),
                         new User(2L, "Todd", "Alquist", "randall.muller@yahoo.com",
                                  "$2a$12$i8XVImk2GVR25s/JAEhw7OWx5Y8uE9G5AjHcNZSFjkUewbZVETevS" /*password: uz2iov8599*/,
                                  Roles.ADMIN, null
                         )
-            ), new Post(3L, "By my will, this shall be finished!", Instant.now(),
+            ), new Post(3L, "By my will, this shall be finished!", LocalDateTime.now(),
                         new User(1L, "Adam", null, "joan.macejkovic@hotmail.com",
                                  "$2a$12$eX7ZhRC9Tw7GJTXLxwNcFutWbqSe22No4y6j1qFJoUPSReO9UkUka" /*password: 519kujoju*/,
                                  Roles.MODERATOR, null
@@ -103,7 +106,7 @@ class PostServiceTest {
                             "$2a$12$uKmJeaGvVOTONTUyQdq0gOY0LWVDuyV9TlVLZonIrHsjQ3q6Mj3oa" /*password: 8vjfc4cp2chifwj*/,
                             Roles.USER, null
         );
-        var now = Instant.now();
+        var now = ZonedDateTime.now(ZoneOffset.UTC);
         var postToSave = new PostDtoRequest("Purge the unjust.");
         var response = service.add(postToSave, user);
 

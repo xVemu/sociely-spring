@@ -13,7 +13,8 @@ import pl.vemu.sociely.exceptions.post.UnauthorizedToManipulatePost;
 import pl.vemu.sociely.mappers.PostMapper;
 import pl.vemu.sociely.repositories.PostRepository;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class PostService {
     public PostDtoResponse add(PostDtoRequest postDto, User user) {
         var mappedPost = mapper.toPost(postDto);
         mappedPost.setUser(user);
-        mappedPost.setCreationDate(Instant.now());
+        mappedPost.setCreationDate(LocalDateTime.now(ZoneOffset.UTC));
         return mapper.toPostDTO(repository.save(mappedPost));
     }
 

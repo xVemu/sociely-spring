@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -24,7 +24,7 @@ public class Post {
     private String text;
 
     @Column(nullable = false)
-    private Instant creationDate;
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(nullable = false)

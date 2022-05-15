@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
@@ -20,7 +21,10 @@
                         <label class="form-label" for="postText">Text: </label>
                         <textarea class="form-control" id="postText" th:field="*{text}"></textarea>
                     </div>
-                    <button class="btn btn-primary mb-3" type="submit">Publish</button>
+                    <button class="btn btn-primary mb-3" sec:authorize="isAuthenticated()" type="submit">Publish
+                    </button>
+                    <a class="btn btn-primary mb-3" sec:authorize="isAnonymous()" th:href="@{/login}">Login to publish
+                        post</a>
                 </form>
             </div>
         </div>
@@ -31,7 +35,8 @@
             <div class="card-body">
                 <h5 class="card-title" th:inline="text" th:object="${post.user}"
                     th:text="*{name} + ' ' + (*{surname} ?: '')"></h5>
-                <h6 class="card-subtitle" th:text="${post.creationDate}"></h6>
+                <h6 class="card-subtitle"
+                    th:text="${#temporals.format(post.creationDate.withZoneSameInstant(timezone.toZoneId()), 'SHORT')}"></h6>
                 <p class="card-text" th:text="${post.text}"></p>
             </div>
         </div>

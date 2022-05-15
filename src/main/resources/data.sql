@@ -1,3 +1,5 @@
 INSERT INTO users
 VALUES (null, 'test@test', 'test', '$2a$10$5WbUNIDgFZcJxsb8HAYK0uE6MJ3NLz0nyl4T37GnaR54DLemVZI7a', 'USER',
-        null); // password: es
+        null); -- password: es
+INSERT INTO posts
+VALUES (null, '2022-05-14 20:46:38.792378', 'arsars', 1);
