@@ -31,7 +31,7 @@ public class PostView {
     public String getPosts(
             @PageableDefault(size = 3)
             @SortDefault.SortDefaults(
-                    @SortDefault(sort = "creationDate", direction = Sort.Direction.ASC)
+                    @SortDefault(sort = "creationDate", direction = Sort.Direction.DESC)
             ) Pageable pageable,
             Model model,
             TimeZone timezone
