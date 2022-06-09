@@ -8,4 +8,54 @@
 5. W przypadku błędu zwracać kod i wiadomość
 6. tylko rzeczowniki w endpointach
 
+https://bykowski.pl/zwiazki-miedzy-relacjami/
+
 ORM implements JPA  - z obiektu java do bazy danych Hibernate/Spring data JPA
+
+
+TODO
+ja tu tylko zebrałam pare propozycji w grupkę tj.:
+(w kwadratowym nawiasie - " [ ] " dałam swoje dopiski)
+.
+.
+Pjoter Zabaglo:
+<<1. Pobieranie filmów
+2. Łapka w dół
+3. 3. Cenzura tylko na borno i gore
+4. 4. Usuwanie grup bezpośrednio
+5. 5. Przywrócenie starego motywu jako opcjonalną opcję
+6. 6. Ultra ciemny motyw
+7. 7. Tryb oszczędzania baterii w którym wyłączone by były animacje i bajery wizualne i FB ograniczony do przeglądania, komentowania i lajkowania głównej>>
+8. .
+9. .
+10. Fedor Khersonskyy:
+11. <<Przydały by się wszystkie co ma Telegram
+12. Mianowicie, wysyłanie plików [+]2GB w jakości rzeczywistej [przypis ode mnie – w takiej jak się wysłało, a nie psucie dobrej jakości artów czy zdjęć]
+13. Brak reklam
+14. Pobieranie filmików
+15. WYCZYSZCZENIE JEBANEGO CACHE
+16. Pisanie kurwa co się zmieniło w apce a nie „Bug fix. Dbamy o jakość aplikacji”
+17. Normalne stickery które może zrobic kazdy
+18. Prywatność, a nie sprzedaż danych>>
+19. .
+20. .
+21. Martyna Elżbieta Zarach:
+22. <<Statusy jak z gadu gadu dostępny, nie przeszkadzać, zaraz wracam, niedostępny, niewidoczny. Udostępniane przez użytkowników zdjęcia w osobnej karcie "Zdjęcia">>
+23. .
+24. .
+25. Paulina Piątkowska:
+26. <<oddzielenie fb od messengera [ jako opcjonalna - masz bana na jednej ze stron, tylko tej nie możesz używać, lecz logowanie się jest na obie] imo chujowe, ze jak mam bana na fb to nie moge pisac do innych>>
+27. .
+28. .
+29. Ode mnie i inne mieszane:
+30. - więcej reakcji do postów,
+31. - zostawić „care emoji” za wszelką cenę, bo każdy tęsknił za kwiatkiem i tęczą, choć były one lekko hate’owane, a ta jest neutralna i imo fajna
+32. - mniejsza wrażliwość na komentarze w grupach (nie mówię, że żadna, ale) jak ktoś napisze [tu wstaw zakazane słowo] to grupa jest jedną nogą w grobie, a jak ktoś znów tak zrobi lub doda na niej  taki post, to spada z rowerka ;( imo usuwanie takich postów czy kom przez moderacje GRUPY (a nie fb) byłoby skuteczniejsze, bo czasem nawet autokorekta włazi i przez to może spaść xD dodatkowo uprzedzanie, że jak nie usunie przez te np. 24- czy 48h to wtedy cały post/kom jest usuwany
+33. - podstawowa edycja zdjęć, takie jak dodanie (z 3 rodzajów czcionek) napisów, czy możliwość zaznaczenia paroma podstawowymi kolorami (taki pędzel) na zdjęciu, jak by sie chciało bawić w inne sprawy to dodanie filtrów i zaawansowanych powyższych, oznaczenia na zdjęciach osób (takie jak ma ig - na zdjęciu jakie osoby)
+34. - jeszcze do edycji zdjęć: możliwość zamazania (rozpikselowania) twarzy (najlepiej albo pędzel, albo automatycznie przez jakiś kod) i/lub imienia i nazwiska
+35. - możliwość wyłączenia odpowiedzi do kom oraz reakcji do niego przez autora komentarza
+36. - animowane prof i tło...
+37. - jak ktoś ma inne zdjęcie niż ryj na prof to nie oznacza że to fake konto xD
+38. -możliwość usunięcia pod oznaczeniem w poście siebie (np znaj mnie oznaczyła pod nowym prof, ja nie chce, abym tam widniała, więc usuwam je)
+39. - możliwość "vipa" czyli pominięcia reklamy za hajs, ja sama bym nie weszła w to, ale mam sporo znaj, którzy są zdeterminowani xD
+i chyba tyle
