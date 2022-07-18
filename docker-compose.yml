@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=sociely
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - sociely_db:/var/lib/postgresql/data
+
+  sociely:
+    image: sociely:0.0.1
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_USERNAME=sociely
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/sociely
+
+volumes:
+  sociely_db:
