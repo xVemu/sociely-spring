@@ -25,46 +25,20 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
     private String surname;
 
-    @Column(
-            nullable = false,
-            length = 320,
-            unique = true
-    )
     private String email;
 
-    @Column(
-            nullable = false,
-            columnDefinition = "char(60)"
-    )
     private String password;
 
-    @Column(
-            nullable = false
-    )
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.USER;
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<Post> posts;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return id != null && Objects.equals(id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -94,5 +68,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
