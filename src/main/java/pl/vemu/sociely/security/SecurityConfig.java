@@ -1,43 +1,65 @@
 package pl.vemu.sociely.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import pl.vemu.sociely.repositories.UserRepository;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(
-                email -> userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email)));
+    private final AuthenticationConfiguration authConfiguration;
+
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return authConfiguration.getAuthenticationManager();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(
+                email -> userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email)));
+        authProvider.setPasswordEncoder(encoder);
+
+        return authProvider;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-//                .antMatchers(HttpMethod.GET, "/api/users").hasAuthority(Roles.ADMIN.getAuthority())
+                .antMatchers("/signup").anonymous()
+                .antMatchers("/login").anonymous()
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/webjars/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .formLogin().permitAll().defaultSuccessUrl("/posts") // TODO only for anonymous
+                .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/", true)
                 .and()
-                .logout().permitAll() // TODO only for logged
+                .logout().logoutSuccessUrl("/")
                 .and()
                 .csrf().disable(); //TODO delete on production?
+
+        return http.build();
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().antMatchers(
                 "/h2-console/**",
 
                 // open api

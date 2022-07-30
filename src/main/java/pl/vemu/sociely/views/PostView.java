@@ -21,7 +21,7 @@ import javax.validation.Valid;
 import java.util.TimeZone;
 
 @Controller
-@RequestMapping("/posts")
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class PostView {
 
@@ -37,7 +37,7 @@ public class PostView {
             TimeZone timezone
     ) {
         model.addAttribute("posts", service.getAll(pageable));
-        model.addAttribute("post", new PostDtoRequest());
+        model.addAttribute("newPost", new PostDtoRequest());
         model.addAttribute("timezone", timezone);
         return "posts";
     }
@@ -50,7 +50,7 @@ public class PostView {
     ) {
         if (result.hasErrors()) return "posts";
         service.add(post, user);
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
 }

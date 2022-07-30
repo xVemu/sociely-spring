@@ -12,11 +12,26 @@
     <script defer th:src="@{/webjars/alpinejs/dist/cdn.min.js}"></script>
 </head>
 <body>
+<nav class="navbar navbar-expand-sm border-bottom">
+    <div class="container">
+        <a class="navbar-brand" href="#">Sociely</a>
+        <div class="collapse navbar-collapse">
+            <input class="form-control w-50 m-auto" placeholder="Search" type="search">
+            <span class="me-2 navbar-text" sec:authorize="isAuthenticated()"
+                  th:text="${#authentication.principal.name} + ' ' + ${#authentication.principal.surname ?: ''}"></span>
+            <a class="btn btn-outline-primary me-2" sec:authorize="isAuthenticated()" th:href="@{/logout}"
+               type="submit">Logout</a>
+            <a class="btn btn-outline-secondary me-2" sec:authorize="isAnonymous()" th:href="@{/signup}" type="submit">Sign
+                up</a>
+            <a class="btn btn-primary me-2" sec:authorize="isAnonymous()" th:href="@{/login}" type="submit">Login</a>
+        </div>
+    </div>
+</nav>
 <div class="container pt-5">
     <div class="row justify-content-center" th:if="${posts.first}">
         <div class="col-md-6 col-10 card mb-3">
             <div class="card-body">
-                <form method="post" th:action="@{/posts}" th:object="${post}">
+                <form method="post" th:object="${newPost}">
                     <div class="mb-3">
                         <label class="form-label" for="postText">Text: </label>
                         <textarea class="form-control" id="postText" th:field="*{text}"></textarea>
@@ -33,24 +48,45 @@
     <div class="row justify-content-center" th:each="post : ${posts.content}">
         <div class="card mb-3 col-md-6 col-10">
             <div class="card-body">
-                <h5 class="card-title" th:inline="text" th:object="${post.user}"
-                    th:text="*{name} + ' ' + (*{surname} ?: '')"></h5>
+                <h5 class="card-title"
+                    th:text="${post.user.name} + ' ' + ${post.user.surname ?: ''}"></h5>
                 <h6 class="card-subtitle"
                     th:text="${#temporals.format(post.creationDate.withZoneSameInstant(timezone.toZoneId()), 'SHORT')}"></h6>
                 <p class="card-text" th:text="${post.text}"></p>
             </div>
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div class="btn-group col-3">
-            <a class="btn btn-primary"
-               th:href="@{/posts(page=${posts.previousPageable().getPageNumber()})}"
-               th:if="${posts.hasPrevious()}">&lt;</a>
-            <a class="btn btn-primary"
-               th:text="${posts.number}"></a>
-            <a class="btn btn-primary"
-               th:href="@{/posts(page=${posts.nextPageable().getPageNumber()})}"
-               th:if="${posts.hasNext()}">&gt;</a>
+    <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" th:href="@{/(page=${posts.previousPageable().getPageNumber()})}"
+                                 th:if="${posts.hasPrevious()}">&laquo;</a></li>
+        <li class="page-item"><a class="page-link" href="#" th:text="${posts.number}">2</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/(page=${posts.nextPageable().getPageNumber()})}"
+                                 th:if="${posts.hasNext()}">&raquo;</a></li>
+    </ul>
+    <div class="modal fade" id="login-modal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form method="post" th:action="@{/login}">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Log in</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-2">
+                            <input class="form-control" id="email" name="email" placeholder="E-mail" type="email">
+                            <label for="email">E-mail</label>
+                        </div>
+                        <div class="form-floating">
+                            <input class="form-control" id="password" name="password" placeholder="Password"
+                                   type="password">
+                            <label for="password">Password</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit">Log In</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
