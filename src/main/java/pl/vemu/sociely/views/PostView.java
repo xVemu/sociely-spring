@@ -1,10 +1,6 @@
 package pl.vemu.sociely.views;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +14,6 @@ import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.services.PostService;
 
 import javax.validation.Valid;
-import java.util.TimeZone;
 
 @Controller
 @RequestMapping("/")
@@ -28,17 +23,8 @@ public class PostView {
     private final PostService service;
 
     @GetMapping
-    public String getPosts(
-            @PageableDefault(size = 3)
-            @SortDefault.SortDefaults(
-                    @SortDefault(sort = "creationDate", direction = Sort.Direction.DESC)
-            ) Pageable pageable,
-            Model model,
-            TimeZone timezone
-    ) {
-        model.addAttribute("posts", service.getAll(pageable));
+    public String getPosts(Model model) {
         model.addAttribute("newPost", new PostDtoRequest());
-        model.addAttribute("timezone", timezone);
         return "posts";
     }
 

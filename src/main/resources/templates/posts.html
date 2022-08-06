@@ -7,9 +7,33 @@
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>Posts</title>
-    <link rel='stylesheet' th:href='@{/webjars/bootstrap/css/bootstrap.min.css}'>
-    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <script defer th:src="@{/webjars/alpinejs/dist/cdn.min.js}"></script>
+    <link href="webjars/bootstrap/css/bootstrap.min.css" rel='stylesheet'
+          th:href='@{/webjars/bootstrap/css/bootstrap.min.css}'>
+    <script src="webjars/bootstrap/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script defer src="webjars/alpinejs/dist/cdn.min.js" th:src="@{/webjars/alpinejs/dist/cdn.min.js}"></script>
+    <script src="webjars/infinite-scroll/dist/infinite-scroll.pkgd.min.js"
+            th:src="@{/webjars/infinite-scroll/dist/infinite-scroll.pkgd.js}"></script>
+    <script defer>
+        const posts = () => ({
+            items: [],
+            init(element) {
+                if (element == null) return
+                const infScroll = new InfiniteScroll(element, {
+                    path: () =>
+                        `api/posts?page=${this.loadCount}`,
+                    status: '.page-load-status',
+                    history: false,
+                    responseBody: 'json'
+                });
+                infScroll.on('load', body => {
+                        this.items = this.items.concat(body.content)
+                        if (body.last) element.data("infiniteScroll").scrollThreshold = false
+                    }
+                );
+                infScroll.loadNextPage();
+            }
+        })
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-sm border-bottom">
@@ -28,7 +52,7 @@
     </div>
 </nav>
 <div class="container pt-5">
-    <div class="row justify-content-center" th:if="${posts.first}">
+    <div class="row justify-content-center">
         <div class="col-md-6 col-10 card mb-3">
             <div class="card-body">
                 <form method="post" th:object="${newPost}">
@@ -44,49 +68,20 @@
             </div>
         </div>
     </div>
-    <!--TODO infinite scroll-->
-    <div class="row justify-content-center" th:each="post : ${posts.content}">
-        <div class="card mb-3 col-md-6 col-10">
-            <div class="card-body">
-                <h5 class="card-title"
-                    th:text="${post.user.name} + ' ' + ${post.user.surname ?: ''}"></h5>
-                <h6 class="card-subtitle"
-                    th:text="${#temporals.format(post.creationDate.withZoneSameInstant(timezone.toZoneId()), 'SHORT')}"></h6>
-                <p class="card-text" th:text="${post.text}"></p>
+    <div x-data="posts()" x-init="init($el)">
+        <template x-for="item in items">
+            <div class="row justify-content-center">
+                <article class="card mb-3 col-md-6 col-10">
+                    <div class="card-body">
+                        <h5 class="card-title" x-text="`${item.user.name} ${item.user.surname ?? ''}`"></h5>
+                        <h6 class="card-subtitle" x-text="new Date(item.creationDate).toLocaleString()"></h6>
+                        <p class="card-text" x-text="item.text"></p>
+                    </div>
+                </article>
             </div>
-        </div>
-    </div>
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" th:href="@{/(page=${posts.previousPageable().getPageNumber()})}"
-                                 th:if="${posts.hasPrevious()}">&laquo;</a></li>
-        <li class="page-item"><a class="page-link" href="#" th:text="${posts.number}">2</a></li>
-        <li class="page-item"><a class="page-link" th:href="@{/(page=${posts.nextPageable().getPageNumber()})}"
-                                 th:if="${posts.hasNext()}">&raquo;</a></li>
-    </ul>
-    <div class="modal fade" id="login-modal" tabindex="-1">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <form method="post" th:action="@{/login}">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Log in</h5>
-                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-2">
-                            <input class="form-control" id="email" name="email" placeholder="E-mail" type="email">
-                            <label for="email">E-mail</label>
-                        </div>
-                        <div class="form-floating">
-                            <input class="form-control" id="password" name="password" placeholder="Password"
-                                   type="password">
-                            <label for="password">Password</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit">Log In</button>
-                    </div>
-                </form>
-            </div>
+        </template>
+        <div class="text-center d-flex m-5 justify-content-center page-load-status">
+            <div class="spinner-border text-primary infinite-scroll-request" role="status"></div>
         </div>
     </div>
 </div>

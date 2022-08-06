@@ -44,6 +44,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/signup").anonymous()
                 .antMatchers("/login").anonymous()
+                .antMatchers("/api/posts").permitAll()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.GET, "/webjars/**").permitAll()
                 .anyRequest().authenticated()
