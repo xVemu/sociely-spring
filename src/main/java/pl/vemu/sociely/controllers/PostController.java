@@ -30,7 +30,7 @@ public class PostController {
 
     @GetMapping
     public Page<PostDtoResponse> getPosts(
-            @PageableDefault(size = 20) @SortDefault.SortDefaults(@SortDefault(sort = "creationDate", direction = Sort.Direction.ASC)) Pageable pageable,
+            @PageableDefault(size = 20) @SortDefault.SortDefaults(@SortDefault(sort = "creationDate", direction = Sort.Direction.DESC)) Pageable pageable,
             @RequestParam Optional<Long> userId
     ) {
         if (userId.isPresent()) return service.getAllByUser(userId.get(), pageable);
