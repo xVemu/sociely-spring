@@ -74,7 +74,7 @@
                 <article class="card mb-3 col-md-6 col-10">
                     <div class="card-body">
                         <h5 class="card-title" x-text="`${item.user.name} ${item.user.surname ?? ''}`"></h5>
-                        <h6 class="card-subtitle" x-text="new Date(item.creationDate).toLocaleString()"></h6>
+                        <h6 class="card-subtitle" x-text="new Date(item.creationDate + 'Z').toLocaleString()"></h6>
                         <p class="card-text" x-text="item.text"></p>
                     </div>
                 </article>

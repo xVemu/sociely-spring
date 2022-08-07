@@ -37,8 +37,12 @@ public class User implements UserDetails {
     private Roles role = Roles.USER;
 
     @OneToMany(mappedBy = "user")
-    @ToString.Exclude
+    @ToString.Exclude /*TODO top 3*/
     private List<Post> posts;
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude /*TODO top 3*/
+    private List<Comment> comments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

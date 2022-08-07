@@ -10,7 +10,6 @@ public interface PostMapper {
 
     Post toPost(PostDtoRequest postDTO);
 
-    @Mapping(target = "creationDate", expression = "java(ZonedDateTime.of(post.getCreationDate(), java.time.ZoneOffset.UTC))")
     PostDtoResponse toPostDTO(Post post);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

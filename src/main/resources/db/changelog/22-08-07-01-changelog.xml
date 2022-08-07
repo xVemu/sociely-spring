@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.14.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1659881149521-11" author="Kamil Kras">
+        <createTable tableName="comments">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comment"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="FK_COMMENT_ON_USER" referencedTableName="users"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="FK_COMMENT_ON_POST" referencedTableName="posts"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="creation_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1659881149521-13" author="Kamil Kras">
+        <modifyDataType tableName="posts" columnName="text" newDataType="text"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -5,39 +5,37 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
+@Entity
+@ToString
 @Getter
 @Setter
-@ToString
-@Entity
-@Table(name = "posts")
+@Table(name = "comments")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String text;
-
-    private LocalDateTime creationDate;
-
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "post")
-    @OrderBy("creationDate") /*TODO top 3*/
-    private List<Comment> comments;
+    @ManyToOne
+    private Post post;
+
+    private String text;
+
+    private LocalDateTime creationDate;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Post post = (Post) o;
-        return id != null && Objects.equals(id, post.id);
+        Comment comment = (Comment) o;
+        return id != null && Objects.equals(id, comment.id);
     }
 
     @Override
