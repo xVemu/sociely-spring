@@ -44,16 +44,14 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/signup").anonymous()
                 .antMatchers("/login").anonymous()
-                .antMatchers("/api/posts").permitAll()
-                .antMatchers(HttpMethod.GET, "/").permitAll()
-                .antMatchers(HttpMethod.GET, "/webjars/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.POST, "/api/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/", true)
                 .and()
                 .logout().logoutSuccessUrl("/")
                 .and()
-                .csrf().disable(); //TODO delete on production?
+                .csrf().disable();
 
         return http.build();
     }

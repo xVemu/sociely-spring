@@ -12,10 +12,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.vemu.sociely.dtos.request.UserDtoRequest;
+import pl.vemu.sociely.dtos.response.CommentDtoResponse;
+import pl.vemu.sociely.dtos.response.PostDtoResponse;
 import pl.vemu.sociely.dtos.response.UserDtoResponse;
 import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.exceptions.user.UserByIdNotFound;
 import pl.vemu.sociely.exceptions.user.UserWithEmailAlreadyExist;
+import pl.vemu.sociely.services.CommentService;
+import pl.vemu.sociely.services.PostService;
 import pl.vemu.sociely.services.UserService;
 import pl.vemu.sociely.utils.PatchValid;
 
@@ -27,14 +31,14 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService service;
+    private final CommentService commentService;
+    private final PostService postService;
 
     @GetMapping
     public Page<UserDtoResponse> getUsers(
-            @PageableDefault(size = 20)
-            @SortDefault.SortDefaults({
+            @PageableDefault(size = 20) @SortDefault.SortDefaults({
                     @SortDefault(sort = "id", direction = Sort.Direction.ASC)
-            })
-                    Pageable pageable
+            }) Pageable pageable
     ) {
         return service.getAll(pageable);
     }
@@ -44,16 +48,28 @@ public class UserController {
         return service.getById(id);
     }
 
+    @GetMapping("{id}/comments")
+    public Page<CommentDtoResponse> getCommentsByUser(
+            @PageableDefault(size = 20) @SortDefault.SortDefaults(@SortDefault(sort = "creationDate", direction = Sort.Direction.DESC)) Pageable pageable,
+            @PathVariable Long id
+    ) {
+        return commentService.getByUser(id, pageable);
+    }
+
+    @GetMapping("{id}/posts")
+    public Page<PostDtoResponse> getPostsByUser(
+            @PageableDefault(size = 20) @SortDefault.SortDefaults(@SortDefault(sort = "creationDate", direction = Sort.Direction.DESC)) Pageable pageable,
+            @PathVariable Long id
+    ) {
+        return postService.getAllByUser(id, pageable);
+    }
+
     @PostMapping
     public ResponseEntity<UserDtoResponse> addUser(
-            @RequestBody @Valid UserDtoRequest userDto,
-            UriComponentsBuilder uriComponentsBuilder
+            @RequestBody @Valid UserDtoRequest userDto, UriComponentsBuilder uriComponentsBuilder
     ) throws UserWithEmailAlreadyExist {
         var savedUser = service.add(userDto);
-        var uri = uriComponentsBuilder
-                .path("/{id}")
-                .buildAndExpand(savedUser.id())
-                .toUri();
+        var uri = uriComponentsBuilder.path("/{id}").buildAndExpand(savedUser.id()).toUri();
         return ResponseEntity.created(uri).body(savedUser);
     }
 
@@ -69,8 +85,7 @@ public class UserController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUserById(
-            @PathVariable Long id,
-            @AuthenticationPrincipal User principal
+            @PathVariable Long id, @AuthenticationPrincipal User principal
     ) throws UserByIdNotFound {
         service.deleteById(id);
         return ResponseEntity.noContent().build();

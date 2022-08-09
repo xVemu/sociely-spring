@@ -10,16 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import pl.vemu.sociely.dtos.request.CommentDtoRequest;
 import pl.vemu.sociely.dtos.request.PostDtoRequest;
+import pl.vemu.sociely.dtos.response.CommentDtoResponse;
 import pl.vemu.sociely.dtos.response.PostDtoResponse;
 import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.exceptions.post.PostByIdNotFound;
 import pl.vemu.sociely.exceptions.post.UnauthorizedToManipulatePost;
+import pl.vemu.sociely.services.CommentService;
 import pl.vemu.sociely.services.PostService;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -27,19 +28,26 @@ import java.util.Optional;
 public class PostController {
 
     private final PostService service;
+    private final CommentService commentService;
 
     @GetMapping
     public Page<PostDtoResponse> getPosts(
-            @PageableDefault(size = 20) @SortDefault.SortDefaults(@SortDefault(sort = "creationDate", direction = Sort.Direction.DESC)) Pageable pageable,
-            @RequestParam Optional<Long> userId
+            @PageableDefault(size = 20) @SortDefault.SortDefaults(@SortDefault(sort = "creationDate", direction = Sort.Direction.DESC)) Pageable pageable
     ) {
-        if (userId.isPresent()) return service.getAllByUser(userId.get(), pageable);
         return service.getAll(pageable);
     }
 
     @GetMapping("{id}")
     public PostDtoResponse getPostById(@PathVariable Long id) throws PostByIdNotFound {
         return service.getById(id);
+    }
+
+    @GetMapping("{postId}/comments")
+    public Page<CommentDtoResponse> getCommentsByPost(
+            @PageableDefault(size = 20) @SortDefault.SortDefaults(@SortDefault(sort = "creationDate", direction = Sort.Direction.DESC)) Pageable pageable,
+            @PathVariable Long postId
+    ) {
+        return commentService.getByPost(postId, pageable);
     }
 
     @PostMapping
@@ -49,8 +57,20 @@ public class PostController {
             UriComponentsBuilder uriComponentsBuilder
     ) {
         var savedPost = service.add(postDTO, user);
-        URI uri = uriComponentsBuilder.path("/{id}").buildAndExpand(savedPost.id()).toUri();
+        var uri = uriComponentsBuilder.path("/{id}").buildAndExpand(savedPost.id()).toUri();
         return ResponseEntity.created(uri).body(savedPost);
+    }
+
+    @PostMapping("{postId}/comments")
+    public ResponseEntity<CommentDtoResponse> addComment(
+            @RequestBody @Valid CommentDtoRequest commentDto,
+            @PathVariable Long postId,
+            @AuthenticationPrincipal User user,
+            UriComponentsBuilder uriComponentsBuilder
+    ) throws PostByIdNotFound {
+        var comment = commentService.add(commentDto, postId, user);
+        var uri = uriComponentsBuilder.path("/{id}").buildAndExpand(comment.id()).toUri(); //TODO
+        return ResponseEntity.created(uri).body(comment);
     }
 
     @PatchMapping("{id}")

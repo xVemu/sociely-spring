@@ -35,13 +35,13 @@ class UserServiceTest {
     private final List<User> users = new ArrayList<>(
             List.of(new User(1L, "Jesse", "Pinkman", "elisabeth.goldner@yahoo.com",
                              "$2a$12$oCXMCYmgaI/cVtUnUvcR3uSqAf6P8O9GQ.5rFjBuQb1Cl4wu5X1eC" /*password: uz2iov8599*/,
-                             Roles.USER, Collections.emptyList()
+                             Roles.USER, Collections.emptyList(), null
             ), new User(2L, "Todd", "Alquist", "randall.muller@yahoo.com",
                         "$2a$12$i8XVImk2GVR25s/JAEhw7OWx5Y8uE9G5AjHcNZSFjkUewbZVETevS" /*password: zt1uk678ydtck7*/,
-                        Roles.ADMIN, Collections.emptyList()
+                        Roles.ADMIN, Collections.emptyList(), null
             ), new User(3L, "Adam", null, "joan.macejkovic@hotmail.com",
                         "$2a$12$eX7ZhRC9Tw7GJTXLxwNcFutWbqSe22No4y6j1qFJoUPSReO9UkUka" /*password: 519kujoju*/,
-                        Roles.MODERATOR, Collections.emptyList()
+                        Roles.MODERATOR, Collections.emptyList(), null
             )));
     @Mock
     UserRepository repository;
