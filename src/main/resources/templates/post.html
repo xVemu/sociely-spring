@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title th:text="${post.text()}"></title>
+    <link href="webjars/bootstrap/css/bootstrap.min.css" rel='stylesheet'
+          th:href='@{/webjars/bootstrap/css/bootstrap.min.css}'>
+    <script src="webjars/bootstrap/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script defer src="webjars/alpinejs/dist/cdn.min.js" th:src="@{/webjars/alpinejs/dist/cdn.min.js}"></script>
+    <script src="webjars/infinite-scroll/dist/infinite-scroll.pkgd.min.js"
+            th:src="@{/webjars/infinite-scroll/dist/infinite-scroll.pkgd.js}"></script>
+    <script th:inline="javascript" th:src="@{/scripts/infinityScroll.js}"></script>
+    <script defer th:inline="javascript">
+        const comments = infinityScroll("[(@{/api/posts/{id}/comments(id=${post.id})})]")
+        const getDate = element => element.innerHTML = new Date("[(${post.creationDate})]Z").toLocaleString()
+    </script>
+</head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<div class="container pt-5">
+    <div class="row justify-content-center">
+        <article class="card mb-3 col-md-6 col-10" x-data="comments">
+            <div class="card-body" th:object="${post}">
+                <div class="d-flex align-items-center mb-2">
+                    <img class="rounded-circle bg-dark" height="40" width="40"/>
+                    <div class="d-flex flex-column ps-2">
+                        <span class="fs-5" th:text="*{user.name} + ' ' + *{user.surname} ?: ''"></span>
+                        <span class="fs-6 text-muted" id="post-date" x-init="getDate($el)"></span>
+                    </div>
+                </div>
+                <p class="card-text" th:text="*{text}"></p>
+            </div>
+            <hr class="border-top border-3 border-dark opacity-75 mb-1" x-show="items.length"/>
+            <!--TODO add comment-->
+            <ul class="list-group list-group-flush border-top-0 border-bottom-0" x-init="init($el)">
+                <template x-for="comment in items">
+                    <li class="list-group-item d-flex flex-column">
+                        <div class="d-flex align-items-center mb-2">
+                            <img class="rounded-circle bg-dark" height="40" width="40"/>
+                            <div class="d-flex flex-column ps-2">
+                                <span class="fs-5" x-text="`${comment.user.name} ${comment.user.surname ?? ''}`"></span>
+                                <span class="fs-6 text-muted"
+                                      x-text="new Date(comment.creationDate + 'Z').toLocaleString()"></span>
+                            </div>
+                        </div>
+                        <span class="text-wrap" x-text="comment.text"></span>
+                    </li>
+                </template>
+            </ul>
+            <div class="text-center d-flex m-5 justify-content-center page-load-status d-none">
+                <div class="spinner-border text-primary infinite-scroll-request" role="status"></div>
+            </div>
+        </article>
+        <div/>
+    </div>
+</div>
+</body>
+</html>

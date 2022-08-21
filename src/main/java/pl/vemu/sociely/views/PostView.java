@@ -5,12 +5,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.vemu.sociely.dtos.request.PostDtoRequest;
 import pl.vemu.sociely.entities.User;
+import pl.vemu.sociely.exceptions.post.PostByIdNotFound;
 import pl.vemu.sociely.services.PostService;
 
 import javax.validation.Valid;
@@ -26,6 +24,17 @@ public class PostView {
     public String getPosts(Model model) {
         model.addAttribute("newPost", new PostDtoRequest());
         return "posts";
+    }
+
+    @GetMapping("{id}")
+    public String getPost(@PathVariable Long id, Model model) {
+        try {
+            var post = service.getById(id);
+            model.addAttribute("post", post);
+            return "post";
+        } catch (PostByIdNotFound e) {
+            return "404";
+        }
     }
 
     @PostMapping

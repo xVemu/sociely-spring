@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<nav class="navbar navbar-expand-sm border-bottom">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">Sociely</a>
+        <div class="collapse navbar-collapse">
+            <input class="form-control w-50 m-auto" placeholder="Search" type="search">
+            <span class="me-2 navbar-text" sec:authorize="isAuthenticated()"
+                  th:text="${#authentication.principal.name} + ' ' + ${#authentication.principal.surname ?: ''}"></span>
+            <a class="btn btn-outline-primary me-2" sec:authorize="isAuthenticated()" th:href="@{/logout}"
+               type="submit">Logout</a>
+            <a class="btn btn-outline-secondary me-2" sec:authorize="isAnonymous()" th:href="@{/signup}" type="submit">Sign
+                up</a>
+            <a class="btn btn-primary me-2" sec:authorize="isAnonymous()" th:href="@{/login}" type="submit">Login</a>
+        </div>
+    </div>
+</nav>
+</html>
