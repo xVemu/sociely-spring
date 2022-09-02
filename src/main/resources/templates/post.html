@@ -6,7 +6,7 @@
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <title th:text="${post.text()}"></title>
+    <title th:text="${post.text()} + ' - Sociely'"></title>
     <link href="webjars/bootstrap/css/bootstrap.min.css" rel='stylesheet'
           th:href='@{/webjars/bootstrap/css/bootstrap.min.css}'>
     <script src="webjars/bootstrap/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
@@ -14,9 +14,17 @@
     <script src="webjars/infinite-scroll/dist/infinite-scroll.pkgd.min.js"
             th:src="@{/webjars/infinite-scroll/dist/infinite-scroll.pkgd.js}"></script>
     <script th:inline="javascript" th:src="@{/scripts/infinityScroll.js}"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"
+          rel="stylesheet"/>
     <script defer th:inline="javascript">
         const comments = infinityScroll("[(@{/api/posts/{id}/comments(id=${post.id})})]")
         const getDate = element => element.innerHTML = new Date("[(${post.creationDate})]Z").toLocaleString()
+
+        function submitForm(form) {
+            if (form.checkValidity())
+                return form.submit()
+            form.reportValidity()
+        }
     </script>
 </head>
 <body>
@@ -35,8 +43,21 @@
                 <p class="card-text" th:text="*{text}"></p>
             </div>
             <hr class="border-top border-3 border-dark opacity-75 mb-1" x-show="items.length"/>
-            <!--TODO add comment-->
             <ul class="list-group list-group-flush border-top-0 border-bottom-0" x-init="init($el)">
+                <li class="list-group-item d-flex gap-2 align-items-center" sec:authorize="isAnonymous()">
+                    <input class="form-control" readonly required type="text" value="Login to comment"/>
+                    <a class="btn btn-primary" th:href="@{/login}">Login</a>
+                </li>
+                <li class="list-group-item" sec:authorize="isAuthenticated()">
+                    <form class="d-flex gap-2 align-items-center" method="post" th:object="${newComment}" x-ref="form">
+                        <img class="rounded-circle bg-dark" height="40" width="40"/>
+                        <input class="form-control" placeholder="Write a comment..." required th:field="*{text}"
+                               type="text">
+                        <span @click="submitForm($refs.form)"
+                              class="material-symbols-rounded fs-3 text-primary text-decoration-none"
+                              type="submit">send</span>
+                    </form>
+                </li>
                 <template x-for="comment in items">
                     <li class="list-group-item d-flex flex-column">
                         <div class="d-flex align-items-center mb-2">

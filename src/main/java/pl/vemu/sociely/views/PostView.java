@@ -6,9 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pl.vemu.sociely.dtos.request.CommentDtoRequest;
 import pl.vemu.sociely.dtos.request.PostDtoRequest;
 import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.exceptions.post.PostByIdNotFound;
+import pl.vemu.sociely.services.CommentService;
 import pl.vemu.sociely.services.PostService;
 
 import javax.validation.Valid;
@@ -19,6 +21,7 @@ import javax.validation.Valid;
 public class PostView {
 
     private final PostService service;
+    private final CommentService commentService;
 
     @GetMapping
     public String getPosts(Model model) {
@@ -31,10 +34,27 @@ public class PostView {
         try {
             var post = service.getById(id);
             model.addAttribute("post", post);
+            model.addAttribute("newComment", new CommentDtoRequest());
             return "post";
         } catch (PostByIdNotFound e) {
             return "404";
         }
+    }
+
+    @PostMapping("{id}")
+    public String addComment(
+            @Valid @ModelAttribute CommentDtoRequest comment,
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user,
+            BindingResult result
+    ) {
+        if (result.hasErrors()) return "posts";
+        try {
+            commentService.add(comment, id, user);
+        } catch (PostByIdNotFound e) {
+            return "404";
+        }
+        return "redirect:/{id}";
     }
 
     @PostMapping

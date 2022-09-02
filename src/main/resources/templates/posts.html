@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="pl" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:x-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <title>Posts</title>
+    <title>Posts - Sociely</title>
     <link href="webjars/bootstrap/css/bootstrap.min.css" rel='stylesheet'
           th:href='@{/webjars/bootstrap/css/bootstrap.min.css}'>
     <script src="webjars/bootstrap/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <div th:inline="javascript" x-data="posts" x-init="init($el)">
+    <div x-data="posts" x-init="init($el)">
         <template x-for="post in items">
             <div class="row justify-content-center">
                 <article class="card mb-3 col-md-6 col-10">
@@ -46,8 +46,8 @@
                             <img class="rounded-circle bg-dark" height="40" width="40"/>
                             <div class="d-flex flex-column ps-2">
                                 <span class="fs-5" x-text="`${user.name} ${user.surname ?? ''}`"></span>
-                                <span class="fs-6 text-muted" id="post-date"
-                                      x-text="new Date(creationDate + 'Z').toLocaleString()"></span>
+                                <a class="fs-6 text-muted" id="post-date" x-bind:href="`/${id}`"
+                                   x-text="new Date(creationDate + 'Z').toLocaleString()"></a>
                             </div>
                         </div>
                         <p class="card-text" x-text="text"></p>
