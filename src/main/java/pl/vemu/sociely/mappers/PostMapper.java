@@ -5,7 +5,10 @@ import pl.vemu.sociely.dtos.request.PostDtoRequest;
 import pl.vemu.sociely.dtos.response.PostDtoResponse;
 import pl.vemu.sociely.entities.Post;
 
-@Mapper(componentModel = "spring", uses = UserMapper.class, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = "spring", uses = {
+        UserMapper.class,
+        CommentMapper.class
+}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface PostMapper {
 
     Post toPost(PostDtoRequest postDTO);

@@ -10,7 +10,7 @@
     </parent>
     <groupId>pl.vemu</groupId>
     <artifactId>sociely</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <name>sociely</name>
     <description>Social app made with SpringBoot and Java</description>
     <properties>

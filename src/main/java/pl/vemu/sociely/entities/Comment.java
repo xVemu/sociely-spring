@@ -23,7 +23,7 @@ public class Comment {
     @ManyToOne
     private User user;
 
-    @ManyToOne /*TODO hide in json*/
+    @ManyToOne
     private Post post;
 
     private String text;

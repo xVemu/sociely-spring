@@ -52,6 +52,30 @@
                         </div>
                         <p class="card-text" x-text="text"></p>
                     </div>
+                    <hr class="border-top border-3 border-dark opacity-75 mb-1" x-show="post.comments.length"/>
+                    <ul class="list-group list-group-flush border-top-0 border-bottom-0">
+                        <li class="list-group-item d-flex gap-2 align-items-center" sec:authorize="isAnonymous()">
+                            <input class="form-control" readonly required type="text" value="Login to comment"/>
+                            <a class="btn btn-primary" th:href="@{/login}">Login</a>
+                        </li>
+                        <li class="list-group-item d-flex gap-2 align-items-center" sec:authorize="isAuthenticated()">
+                            <a class="btn btn-primary w-100" x-bind:href="`/${post.id}`">Add comment</a>
+                        </li>
+                        <template x-for="comment in post.comments.slice(0, 3)">
+                            <li class="list-group-item d-flex flex-column">
+                                <div class="d-flex align-items-center mb-2">
+                                    <img class="rounded-circle bg-dark" height="40" width="40"/>
+                                    <div class="d-flex flex-column ps-2">
+                                        <span class="fs-5"
+                                              x-text="`${comment.user.name} ${comment.user.surname ?? ''}`"></span>
+                                        <span class="fs-6 text-muted"
+                                              x-text="new Date(comment.creationDate + 'Z').toLocaleString()"></span>
+                                    </div>
+                                </div>
+                                <span class="text-wrap" x-text="comment.text"></span>
+                            </li>
+                        </template>
+                    </ul>
                 </article>
             </div>
         </template>

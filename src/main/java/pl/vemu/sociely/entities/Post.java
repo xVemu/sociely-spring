@@ -29,7 +29,7 @@ public class Post {
     private User user;
 
     @OneToMany(mappedBy = "post")
-    @OrderBy("creationDate") /*TODO top 3*/
+    @OrderBy("creationDate desc") /*TODO top 3*/
     private List<Comment> comments;
 
     @Override
