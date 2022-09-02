@@ -7,7 +7,6 @@ import pl.vemu.sociely.entities.Comment;
 
 @Mapper(uses = {
         UserMapper.class,
-        PostMapper.class
 }, injectionStrategy = InjectionStrategy.CONSTRUCTOR, unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface CommentMapper {
 

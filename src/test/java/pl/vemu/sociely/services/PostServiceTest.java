@@ -13,6 +13,7 @@ import pl.vemu.sociely.entities.Post;
 import pl.vemu.sociely.entities.User;
 import pl.vemu.sociely.exceptions.post.PostByIdNotFound;
 import pl.vemu.sociely.exceptions.post.UnauthorizedToManipulatePost;
+import pl.vemu.sociely.mappers.CommentMapper;
 import pl.vemu.sociely.mappers.PostMapper;
 import pl.vemu.sociely.mappers.PostMapperImpl;
 import pl.vemu.sociely.mappers.UserMapper;
@@ -57,7 +58,7 @@ class PostServiceTest {
 
     @BeforeEach
     void setUp() {
-        mapper = new PostMapperImpl(Mappers.getMapper(UserMapper.class));
+        mapper = new PostMapperImpl(Mappers.getMapper(UserMapper.class), Mappers.getMapper(CommentMapper.class));
         service = new PostService(repository, mapper);
     }
 
